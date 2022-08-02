@@ -1,17 +1,20 @@
 from rest_framework import serializers
 
-from library.models import Book, Author
+from .models import Book, Author
 
 
 class BookSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Book
-        fields = ('title', 'year_of_writing', 'author')
+        fields = ('title', 'year_of_writing', 'author', 'description')
 
 
-class AuthorSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=300)
-    surname = serializers.CharField(max_length=300)
+class AuthorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Author
+        fields = ('name', 'surname', 'image', 'description')
 
     def create(self, validated_data: dict) -> Author:
         return Author.objects.create(**validated_data)

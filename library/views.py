@@ -1,9 +1,22 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from library.models import Book, Author
-from library.serializers import BookSerializer, AuthorSerializer
+from .models import Book, Author
+from .serializers import BookSerializer, AuthorSerializer
+from .services import AuthorService
+
+
+def index(request):
+    return render(request, 'index.html')
+
+
+def authors(request):
+    return render(request, 'authors.html')
 
 
 class BookListAPIView(ListAPIView):
@@ -13,27 +26,35 @@ class BookListAPIView(ListAPIView):
         return Book.objects.all()
 
 
+class AuthorListAPIView(ListAPIView):
+    serializer_class = AuthorSerializer
+
+    def get_queryset(self):
+        return Author.objects.all()
+
+
 class AuthorAPIView(APIView):
+    @staticmethod
+    def get(request, *args, **kwargs):
+        return Response(data="Get запрос пока не определен")
 
-    def post(self, request):
-        serializer = AuthorSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+    @staticmethod
+    def post(request) -> Response:
+        try:
+            return Response(AuthorService.create(request.data))
+        except ValidationError:
+            return Response(data="Invalid data")
 
-        return Response({'author': serializer.data})
-
-    def put(self, request, *args, **kwargs):
+    @staticmethod
+    def put(request, *args, **kwargs) -> Response:
         primary_key = kwargs.get('pk')
 
         if primary_key is None:
-            return Response({'errors': "Method PUT is not allowed."})
+            return Response(data="Primary key does not specified")
 
         try:
-            author = Author.objects.get(pk=primary_key)
-        except:
-            return Response({'errors': "Object does not exists."})
-
-        serializer = AuthorSerializer(data=request.data, instance=author)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+            return Response(data=AuthorService.update(request.data, primary_key))
+        except ValidationError:
+            return Response(data="Invalid data")
+        except ObjectDoesNotExist:
+            return Response(data="Author does not exists")
