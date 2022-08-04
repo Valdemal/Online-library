@@ -37,7 +37,7 @@
 
     created: function () {
         let vm = this;
-        axios.get('/api/author/').then(function (response) {
+        axios.get('/api/authors/').then(function (response) {
             vm.authors = response.data;
         })
     }

@@ -2,20 +2,26 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.core.validators import MaxValueValidator
-
+from django.core.validators import MaxValueValidator, FileExtensionValidator
 
 class Book(models.Model):
     FILE_UPLOAD_ROOT = 'books/'
 
     title = models.CharField(max_length=255, verbose_name='Название')
+
     creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания записи')
+
     author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name='Автор')
+
     description = models.TextField(verbose_name='Описание')
-    file = models.FileField(verbose_name='Файл', upload_to=FILE_UPLOAD_ROOT)
-    year_of_writing = models.IntegerField(validators=[
+
+    file = models.FileField(verbose_name='Файл', upload_to=FILE_UPLOAD_ROOT, validators=[
+        FileExtensionValidator(allowed_extensions=('pdf', 'docx'))
+    ])
+
+    year_of_writing = models.IntegerField(null=True, verbose_name='Год написания', validators=[
         MaxValueValidator(datetime.now().year),
-    ], null=True, verbose_name='Год написания')
+    ], )
 
     def __str__(self):
         return self.title
@@ -28,6 +34,7 @@ class Book(models.Model):
         verbose_name = 'Книга'
         verbose_name_plural = 'Книги'
         ordering = ['-creation_time']
+        unique_together = [('title', 'author')]
 
 
 class Author(models.Model):
@@ -48,6 +55,7 @@ class Author(models.Model):
     class Meta:
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
+        unique_together = [('name', 'surname')]
 
 
 class Comment(models.Model):
