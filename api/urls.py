@@ -1,13 +1,14 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from .views import BookListAPIView, AuthorAPIView, AuthorListAPIView, BookAPIView, AuthorBooksAPIView
+from .views import BookViewSet, AuthorViewSet
 
 app_name = 'api'
 
+router = DefaultRouter()
+router.register(r'authors', AuthorViewSet)
+router.register(r'books', BookViewSet)
+
 urlpatterns = [
-    path('books/', BookListAPIView.as_view()),
-    path('books/<int:pk>/', BookAPIView.as_view()),
-    path('authors/', AuthorListAPIView.as_view()),
-    path('authors/<int:pk>/', AuthorAPIView.as_view()),
-    path('authors/<int:pk>/books/', AuthorBooksAPIView.as_view())
+    path('', include(router.urls))
 ]
