@@ -1,29 +1,45 @@
 from datetime import datetime
 
-from django.contrib.auth.models import User
+from user.models import User
 from django.db import models
-from django.core.validators import MaxValueValidator, FileExtensionValidator, MinValueValidator, \
-    validate_image_file_extension
+from django.core.validators import (
+    MaxValueValidator, FileExtensionValidator,
+    MinValueValidator, validate_image_file_extension
+)
 
 
 class Book(models.Model):
     FILE_UPLOAD_ROOT = 'books/'
 
-    title = models.CharField(max_length=255, verbose_name='Название')
+    title = models.CharField(
+        max_length=255, verbose_name='Название'
+    )
 
-    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания записи')
+    creation_time = models.DateField(
+        auto_now_add=True, verbose_name='Дата создания записи'
+    )
 
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name='Автор')
+    author = models.ForeignKey(
+        'Author', on_delete=models.CASCADE, verbose_name='Автор'
+    )
 
-    description = models.TextField(verbose_name='Описание')
+    description = models.TextField(
+        verbose_name='Описание'
+    )
 
-    file = models.FileField(verbose_name='Файл', upload_to=FILE_UPLOAD_ROOT, validators=[
-        FileExtensionValidator(allowed_extensions=('pdf', 'docx'))
-    ])
+    file = models.FileField(
+        verbose_name='Файл', upload_to=FILE_UPLOAD_ROOT,
+        validators=[
+            FileExtensionValidator(allowed_extensions=('pdf', 'docx'))
+        ]
+    )
 
-    year_of_writing = models.IntegerField(null=True, verbose_name='Год написания', validators=[
-        MaxValueValidator(datetime.now().year),
-    ], )
+    year_of_writing = models.IntegerField(
+        null=True, verbose_name='Год написания',
+        validators=[
+            MaxValueValidator(datetime.now().year),
+        ],
+    )
 
     def __str__(self):
         return self.title
@@ -42,13 +58,20 @@ class Book(models.Model):
 class Author(models.Model):
     PHOTO_UPLOAD_ROOT = 'images/'
 
-    name = models.CharField(max_length=300, verbose_name='Имя')
+    name = models.CharField(
+        max_length=300, verbose_name='Имя',
+    )
 
-    surname = models.CharField(max_length=300, verbose_name='Фамилия')
+    surname = models.CharField(
+        max_length=300, verbose_name='Фамилия',
+    )
 
-    image = models.ImageField(verbose_name='Портрет', null=True,
-                              upload_to=PHOTO_UPLOAD_ROOT,
-                              validators=[validate_image_file_extension])
+    image = models.ImageField(
+        verbose_name='Портрет', null=True, upload_to=PHOTO_UPLOAD_ROOT,
+        validators=[
+            validate_image_file_extension
+        ]
+    )
 
     description = models.TextField(verbose_name='Описание')
 
