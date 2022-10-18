@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,9 +6,11 @@ from rest_framework.viewsets import ModelViewSet
 
 from library.models import Book, Author
 from library.serializers import BookSerializer, AuthorSerializer
-
 from .permissions import IsStaffOrReadOnly
 
+
+def index(request):
+    return redirect('api/')
 
 class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
