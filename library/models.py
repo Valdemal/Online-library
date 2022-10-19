@@ -1,15 +1,16 @@
 from datetime import datetime
 
-from user.models import User
-from django.db import models
 from django.core.validators import (
     MaxValueValidator, FileExtensionValidator,
     MinValueValidator, validate_image_file_extension
 )
+from django.db import models
+
+from main import settings
 
 
 class Book(models.Model):
-    FILE_UPLOAD_ROOT = 'books/'
+    UPLOAD_ROOT = 'books/'
 
     title = models.CharField(
         max_length=255, verbose_name='Название'
@@ -28,7 +29,7 @@ class Book(models.Model):
     )
 
     file = models.FileField(
-        verbose_name='Файл', upload_to=FILE_UPLOAD_ROOT,
+        verbose_name='Файл', upload_to=UPLOAD_ROOT + 'files/',
         validators=[
             FileExtensionValidator(allowed_extensions=('pdf', 'docx'))
         ]
@@ -41,11 +42,19 @@ class Book(models.Model):
         ],
     )
 
+    cover = models.ImageField(
+        verbose_name='Обложка', blank=True, upload_to=UPLOAD_ROOT + 'covers/',
+        validators=[
+            validate_image_file_extension
+        ]
+    )
+
     def __str__(self):
         return self.title
 
     def delete(self, *args, **kwargs):
         self.file.delete()
+        self.cover.delete()
         super().delete(*args, **kwargs)
 
     class Meta:
@@ -56,7 +65,7 @@ class Book(models.Model):
 
 
 class Author(models.Model):
-    PHOTO_UPLOAD_ROOT = 'images/'
+    UPLOAD_ROOT = 'authors/'
 
     name = models.CharField(
         max_length=300, verbose_name='Имя',
@@ -67,7 +76,7 @@ class Author(models.Model):
     )
 
     image = models.ImageField(
-        verbose_name='Портрет', null=True, upload_to=PHOTO_UPLOAD_ROOT,
+        verbose_name='Портрет', blank=True, upload_to=UPLOAD_ROOT + 'images/',
         validators=[
             validate_image_file_extension
         ]
@@ -93,7 +102,7 @@ class Comment(models.Model):
         MaxValueValidator(5), MinValueValidator(1),
     ])
     text = models.TextField(verbose_name='Текст')
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Пользователь', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, verbose_name='Книга', on_delete=models.CASCADE)
 
     class Meta:

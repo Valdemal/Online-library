@@ -4,14 +4,18 @@ from django.db import models
 
 
 class User(AbstractUser):
-    PHOTO_UPLOAD_ROOT = 'images/'
+    UPLOAD_ROOT = 'users/'
 
     photo = models.ImageField(
-        verbose_name='Фото', blank=True, upload_to=PHOTO_UPLOAD_ROOT,
+        verbose_name='Фото', blank=True, upload_to=UPLOAD_ROOT + 'photos/',
         validators=[
             validate_image_file_extension
         ]
     )
+
+    is_active = models.BooleanField(verbose_name='Статус активности', default=False)
+
+    email = models.EmailField(verbose_name="Адрес электронной почты")
 
     def delete(self, using=None, keep_parents=False):
         self.photo.delete()
