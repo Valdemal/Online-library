@@ -66,6 +66,8 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# При выполнении миграции, необходимо подставлять фактические значения,
+# так как переменные окружения не устанавливаются
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

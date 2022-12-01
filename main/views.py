@@ -16,17 +16,19 @@ class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = (IsStaffOrReadOnly,)
+    lookup_field = 'slug'
 
 
 class AuthorViewSet(ModelViewSet):
     serializer_class = AuthorSerializer
     queryset = Author.objects.all()
     permission_classes = (IsStaffOrReadOnly,)
+    lookup_field = 'slug'
 
     @action(methods=['GET'], detail=True)
-    def books(self, request, pk=None):
-        if pk is not None:
-            serialized = BookSerializer(Book.objects.filter(author=pk), many=True)
+    def books(self, request, slug=None):
+        if slug is not None:
+            serialized = BookSerializer(Book.objects.filter(author__slug=slug), many=True)
             return Response(serialized.data)
         else:
-            return Response(data='Primary key does not specified', status=status.HTTP_400_BAD_REQUEST)
+            return Response(data='Author slug does not specified', status=status.HTTP_400_BAD_REQUEST)
