@@ -1,22 +1,27 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
-from .views import AuthorViewSet, BookViewSet, index
-
+from library.views import AuthorViewSet, BookViewSet, GenreViewSet
+from djoser.views import UserViewSet
 
 router = DefaultRouter()
 router.register(r'authors', AuthorViewSet, 'authors')
 router.register(r'books', BookViewSet, 'books')
+router.register(r'genres', GenreViewSet, 'genres')
+router.register(r'users', UserViewSet, 'users')
+
+def index(request):
+    return redirect('api/')
 
 
 urlpatterns = [
     path('', index),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
 

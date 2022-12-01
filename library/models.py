@@ -2,11 +2,10 @@ from datetime import datetime
 
 from django.core.validators import (
     MaxValueValidator, FileExtensionValidator,
-    MinValueValidator, validate_image_file_extension
+    validate_image_file_extension
 )
 from django.db import models
 
-from main import settings
 from main.utils import slugify
 
 
@@ -45,6 +44,22 @@ class Author(models.Model):
         unique_together = [('name', 'surname')]
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=70, unique=True, verbose_name='Название')
+    slug = models.SlugField(max_length=100, unique=True, auto_created=True, verbose_name='URL')
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(str(self))
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
+
+
 class Book(models.Model):
     UPLOAD_ROOT = 'books/'
 
@@ -73,6 +88,8 @@ class Book(models.Model):
         validators=[validate_image_file_extension]
     )
 
+    genres = models.ManyToManyField(Genre)
+
     def __str__(self):
         return self.title
 
@@ -93,18 +110,3 @@ class Book(models.Model):
         ordering = ['-creation_time']
         unique_together = [('title', 'author')]
 
-
-class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Пользователь', on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, verbose_name='Книга', on_delete=models.CASCADE)
-    score = models.FloatField(null=True, verbose_name='Оценка', validators=[
-        MaxValueValidator(5), MinValueValidator(1),
-    ])
-    text = models.TextField(verbose_name='Текст')
-    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания')
-
-    class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
-        unique_together = [('user', 'book')]
-        ordering = ['-creation_time']
