@@ -6,13 +6,15 @@ from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 from library.views import AuthorViewSet, BookViewSet, GenreViewSet
-from djoser.views import UserViewSet
+
+from user.views import UserViewSet, CommentViewSet
 
 router = DefaultRouter()
 router.register(r'authors', AuthorViewSet, 'authors')
 router.register(r'books', BookViewSet, 'books')
 router.register(r'genres', GenreViewSet, 'genres')
 router.register(r'users', UserViewSet, 'users')
+router.register(r'comments', CommentViewSet, 'comments')
 
 def index(request):
     return redirect('api/')
