@@ -68,7 +68,7 @@ class Genre(get_model_with_slug(100)):
         verbose_name_plural = 'Жанры'
 
 
-class Book(get_model_with_slug(302)):
+class Book(get_model_with_slug(320)):
     UPLOAD_ROOT = 'books/'
 
     title = models.CharField(max_length=100, verbose_name='Название')
@@ -94,7 +94,7 @@ class Book(get_model_with_slug(302)):
         validators=[validate_image_file_extension]
     )
 
-    genres = models.ManyToManyField(Genre)
+    genres = models.ManyToManyField(Genre, verbose_name='Жанры')
 
     def __str__(self):
         return self.title

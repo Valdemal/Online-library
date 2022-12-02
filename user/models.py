@@ -39,3 +39,15 @@ class Comment(models.Model):
         verbose_name_plural = 'Комментарии'
         unique_together = [('user', 'book')]
         ordering = ['-creation_time']
+
+
+class Reading(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='Книга')
+    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания')
+
+    class Meta:
+        verbose_name = 'Чтение'
+        verbose_name_plural = 'Чтения'
+        unique_together = [('user', 'book')]
+        ordering = ['-creation_time']
