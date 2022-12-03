@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
 
 from library.models import Book
 from user.models import User, Comment, Reading

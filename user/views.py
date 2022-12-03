@@ -1,11 +1,11 @@
 from djoser.views import UserViewSet as DjoserUserViewSet
 from rest_framework import mixins
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from main.permissions import IsStaffOrReadOnly, IsAuthor, CanCreateIfAuthenticated
+from main.permissions import IsStaffOrReadOnly, IsAuthor, CanCreateIfAuthenticated, IsStaff
 from user.models import Comment, Reading
 from user.serializers import CommentGetSerializer, CommentSetSerializer, ReadingGetSerializer, ReadingSetSerializer
 
@@ -13,11 +13,14 @@ from user.serializers import CommentGetSerializer, CommentSetSerializer, Reading
 class UserViewSet(DjoserUserViewSet):
     lookup_field = 'username'
 
+    # IsStaff
+    @permission_classes([IsStaff])
     @action(methods=['GET'], detail=True)
     def comments(self, request, username):
         serialized = CommentGetSerializer(Comment.objects.filter(user__username=username), many=True)
         return Response(serialized.data)
 
+    # IsStaff
     @action(methods=['GET'], detail=True)
     def readings(self, request, username):
         serialized = ReadingGetSerializer(Reading.objects.filter(user__username=username), many=True)

@@ -5,11 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from main.permissions import IsStaffOrReadOnly
-
 from library.models import Book, Author, Genre
 from library.serializers import BookSerializer, AuthorSerializer, GenreSerializer
-
+from main.permissions import IsStaffOrReadOnly
 from user.models import Comment, Reading
 from user.serializers import CommentGetSerializer, ReadingGetSerializer
 
@@ -52,10 +50,11 @@ class BookViewSet(SlugRoutedModelViewSet):
             CommentGetSerializer, slug
         )
 
+    # isStaff
     @action(methods=['GET'], detail=True)
     def readings(self, request, slug=None):
         return self.get_response_by_slug(
-            lambda slug: Reading.objects.filter(book__slug=slug),
+            lambda slug: Reading.objects.filter(book__slug=slug, user=request.user),
             ReadingGetSerializer, slug
         )
 

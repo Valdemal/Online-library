@@ -8,6 +8,12 @@ class IsStaffOrReadOnly(BasePermission):
 
         return bool(request.user and request.user.is_staff)
 
+
+class IsStaff(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_staff)
+
+
 class IsAuthor(BasePermission):
     """
     Если пользователь является автором, то он имеет право совершать любые действия со своим объектом.
@@ -19,6 +25,7 @@ class IsAuthor(BasePermission):
 
     def has_permission(self, request, view):
         return request.method in SAFE_METHODS
+
 
 class CanCreateIfAuthenticated(BasePermission):
     """
