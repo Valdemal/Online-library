@@ -5,13 +5,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from main.permissions import IsStaffOrReadOnly
+
 from library.models import Book, Author, Genre
 from library.serializers import BookSerializer, AuthorSerializer, GenreSerializer
 
-from main.permissions import IsStaffOrReadOnly
-
-from user.models import Comment
-from user.serializers import CommentSerializer
+from user.models import Comment, Reading
+from user.serializers import CommentGetSerializer, ReadingGetSerializer
 
 
 class SlugRoutedModelViewSet(ModelViewSet):
@@ -49,7 +49,14 @@ class BookViewSet(SlugRoutedModelViewSet):
     def comments(self, request, slug=None):
         return self.get_response_by_slug(
             lambda slug: Comment.objects.filter(book__slug=slug),
-            CommentSerializer, slug
+            CommentGetSerializer, slug
+        )
+
+    @action(methods=['GET'], detail=True)
+    def readings(self, request, slug=None):
+        return self.get_response_by_slug(
+            lambda slug: Reading.objects.filter(book__slug=slug),
+            ReadingGetSerializer, slug
         )
 
 

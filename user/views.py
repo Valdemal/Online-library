@@ -1,13 +1,13 @@
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-
 from djoser.views import UserViewSet as DjoserUserViewSet
+from rest_framework import mixins
+from rest_framework.decorators import action
+from rest_framework.permissions import SAFE_METHODS
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from main.permissions import IsStaffOrReadOnly, IsAuthor
+from main.permissions import IsStaffOrReadOnly, IsAuthor, CanCreateIfAuthenticated
 from user.models import Comment, Reading
-
-from user.serializers import CommentSerializer, ReadingSerializer
+from user.serializers import CommentGetSerializer, CommentSetSerializer, ReadingGetSerializer, ReadingSetSerializer
 
 
 class UserViewSet(DjoserUserViewSet):
@@ -15,22 +15,27 @@ class UserViewSet(DjoserUserViewSet):
 
     @action(methods=['GET'], detail=True)
     def comments(self, request, username):
-        serialized = CommentSerializer(Comment.objects.filter(user__username=username), many=True)
+        serialized = CommentGetSerializer(Comment.objects.filter(user__username=username), many=True)
         return Response(serialized.data)
 
     @action(methods=['GET'], detail=True)
     def readings(self, request, username):
-        serialized = ReadingSerializer(Reading.objects.filter(user__username=username), many=True)
+        serialized = ReadingGetSerializer(Reading.objects.filter(user__username=username), many=True)
         return Response(serialized.data)
 
 
 class CommentViewSet(ModelViewSet):
-    serializer_class = CommentSerializer
     queryset = Comment.objects.all()
-    permission_classes = (IsStaffOrReadOnly, IsAuthor)
+    # Заебало
+    permission_classes = [((IsStaffOrReadOnly | CanCreateIfAuthenticated) | IsAuthor), ]
+
+    def get_serializer_class(self):
+        return CommentGetSerializer if self.request.method in SAFE_METHODS else CommentSetSerializer
 
 
-class ReadingViewSet(ModelViewSet):
-    serializer_class = ReadingSerializer
+class ReadingViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
     queryset = Reading.objects.all()
-    permission_classes = (IsStaffOrReadOnly, IsAuthor)
+
+    def get_serializer_class(self):
+        return ReadingGetSerializer if self.request.method in SAFE_METHODS else ReadingSetSerializer
+

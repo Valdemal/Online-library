@@ -16,7 +16,7 @@ class User(AbstractUser):
         ]
     )
 
-    is_active = models.BooleanField(verbose_name='Статус активности', default=False)
+    is_active = models.BooleanField(verbose_name='Статус активности', default=True)
 
     email = models.EmailField(verbose_name="Адрес электронной почты")
 

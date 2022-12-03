@@ -15,7 +15,7 @@ def get_model_with_slug(slug_max_len: int):
     """
 
     class SlugModel(models.Model):
-        slug = models.SlugField(max_length=slug_max_len, unique=True, auto_created=True, verbose_name='URL')
+        slug = models.SlugField(max_length=slug_max_len, unique=True, editable=False, verbose_name='URL',)
 
         def slugify(self) -> str:
             return slugify_unicode(str(self))
@@ -94,7 +94,7 @@ class Book(get_model_with_slug(320)):
         validators=[validate_image_file_extension]
     )
 
-    genres = models.ManyToManyField(Genre, verbose_name='Жанры')
+    genres = models.ManyToManyField(Genre, blank=True, verbose_name='Жанры')
 
     def __str__(self):
         return self.title

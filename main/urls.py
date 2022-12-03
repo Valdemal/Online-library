@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 
 from library.views import AuthorViewSet, BookViewSet, GenreViewSet
 
-from user.views import UserViewSet, CommentViewSet
+from user.views import UserViewSet, CommentViewSet, ReadingViewSet
 
 router = DefaultRouter()
 router.register(r'authors', AuthorViewSet, 'authors')
@@ -15,6 +15,7 @@ router.register(r'books', BookViewSet, 'books')
 router.register(r'genres', GenreViewSet, 'genres')
 router.register(r'users', UserViewSet, 'users')
 router.register(r'comments', CommentViewSet, 'comments')
+router.register(r'readings', ReadingViewSet, 'readings')
 
 def index(request):
     return redirect('api/')
