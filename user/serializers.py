@@ -5,9 +5,11 @@ from user.models import User, Comment, Reading
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ('username', 'email', 'photo', 'is_staff')
+        read_only_fields = ('username', 'email', 'is_staff')
 
 
 class CommentGetSerializer(serializers.ModelSerializer):
