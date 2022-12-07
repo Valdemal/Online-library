@@ -2,6 +2,7 @@ from typing import Callable
 
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -41,7 +42,6 @@ class SlugRoutedModelViewSet(ModelViewSet):
 class BookViewSet(SlugRoutedModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-    permission_classes = (IsStaffOrReadOnly,)
 
     @action(methods=['GET'], detail=True)
     def comments(self, request, slug=None):
@@ -50,13 +50,18 @@ class BookViewSet(SlugRoutedModelViewSet):
             CommentGetSerializer, slug
         )
 
-    # isStaff
     @action(methods=['GET'], detail=True)
     def readings(self, request, slug=None):
         return self.get_response_by_slug(
             lambda slug: Reading.objects.filter(book__slug=slug, user=request.user),
             ReadingGetSerializer, slug
         )
+
+    def get_permissions(self):
+        if self.action == 'readings':
+            return IsAdminUser(),
+        else:
+            return IsStaffOrReadOnly(),
 
 
 class AuthorViewSet(SlugRoutedModelViewSet):

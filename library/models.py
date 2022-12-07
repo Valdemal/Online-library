@@ -73,7 +73,7 @@ class Book(get_model_with_slug(320)):
 
     title = models.CharField(max_length=100, verbose_name='Название')
 
-    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания записи')
+    creation_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания записи')
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
 

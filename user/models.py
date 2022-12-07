@@ -32,7 +32,7 @@ class Comment(models.Model):
         MaxValueValidator(5), MinValueValidator(1),
     ])
     text = models.TextField(verbose_name='Текст')
-    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания')
+    creation_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
         verbose_name = 'Комментарий'
@@ -44,7 +44,7 @@ class Comment(models.Model):
 class Reading(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='Книга')
-    creation_time = models.DateField(auto_now_add=True, verbose_name='Дата создания')
+    creation_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
         verbose_name = 'Чтение'
