@@ -9,7 +9,7 @@ __pycache__
 db.sqlite3
 media
 venv/
-
+.env.db
 .idea
 # Backup files #
 *.bak
