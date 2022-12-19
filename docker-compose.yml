@@ -5,9 +5,10 @@ services:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - /var/opt/pgbackups:/backups
     env_file: .env
-    ports:
-      - 5432:5432
+    expose:
+      - 5432
 
   django:
     container_name: online_library_django
@@ -16,6 +17,7 @@ services:
     volumes:
       - .:/usr/src/app
       - static_volume:/usr/src/app/static
+      - /var/opt/pgbackups:/backups
     expose:
       - 8000
     env_file:
@@ -26,7 +28,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - static_volume:/usr/src/app/static
     depends_on:

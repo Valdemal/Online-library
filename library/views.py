@@ -53,7 +53,7 @@ class BookViewSet(SlugRoutedModelViewSet):
     @action(methods=['GET'], detail=True)
     def readings(self, request, slug=None):
         return self.get_response_by_slug(
-            lambda slug: Reading.objects.filter(book__slug=slug, user=request.user),
+            lambda slug: Reading.objects.filter(book__slug=slug),
             ReadingGetSerializer, slug
         )
 

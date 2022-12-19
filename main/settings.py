@@ -119,7 +119,7 @@ AUTH_USER_MODEL = 'user.User'
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = os.getenv('TZ')
 
 USE_I18N = True
 
