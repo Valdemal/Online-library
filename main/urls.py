@@ -1,11 +1,8 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.staticfiles.views import serve
 from django.shortcuts import redirect
 from django.urls import path, include
-from django.views.decorators.cache import never_cache
-
 from rest_framework.routers import DefaultRouter
 
 from library.views import AuthorViewSet, BookViewSet, GenreViewSet
