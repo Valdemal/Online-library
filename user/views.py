@@ -47,7 +47,7 @@ class CommentViewSet(ModelViewSet):
             return IsAuthorOrStaff(),
 
 
-class ReadingViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, GenericViewSet):
+class ReadingViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin):
     queryset = Reading.objects.all()
     filterset_class = ReadingFilter
 
