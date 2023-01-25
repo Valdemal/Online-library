@@ -3,7 +3,7 @@ from django.core.validators import validate_image_file_extension, MinValueValida
 from django.db import models
 
 from library.models import Book
-from main import settings
+from django.conf import settings
 
 
 class User(AbstractUser):
