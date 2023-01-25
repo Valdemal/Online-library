@@ -19,7 +19,7 @@ class YandexDisk(YaDisk):
         if not self.check_token():
             raise TokenError("Неверный токен для подключения к яндекс диску. Возможно, токен устарел.")
 
-    def get_latest_file_from_remote_dir(self, remote_dir_path: str) -> ResourceObject or None:
+    def get_latest_file_from_dir(self, remote_dir_path: str) -> ResourceObject or None:
         files = list(self.listdir(remote_dir_path))
 
         files.sort(key=lambda file: file.created)

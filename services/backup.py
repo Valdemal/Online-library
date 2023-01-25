@@ -1,12 +1,11 @@
 import os
 import shutil
-import sys
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
 
+import click
 from yadisk.exceptions import PathExistsError, YaDiskError
-
 from yandex_disk import YandexDisk
 
 
@@ -38,7 +37,7 @@ class MediaBackuper(AbstractBackuper):
     @classmethod
     def download(cls) -> str:
         disk = YandexDisk()
-        latest = disk.get_latest_file_from_remote_dir(cls.REMOTE_BACKUPS_ROOT)
+        latest = disk.get_latest_file_from_dir(cls.REMOTE_BACKUPS_ROOT)
 
         if latest is None:
             return None
@@ -51,7 +50,7 @@ class MediaBackuper(AbstractBackuper):
 
 class DatabaseBackuper(AbstractBackuper):
     LOCAL_BACKUPS_ROOT = '/backups/'
-    REMOTE_BACKUPS_ROOT = "backups/"
+    REMOTE_BACKUPS_ROOT = 'backups/'
 
     @classmethod
     def send(cls):
@@ -63,7 +62,7 @@ class DatabaseBackuper(AbstractBackuper):
     @classmethod
     def download(cls) -> str:
         disk = YandexDisk()
-        latest = disk.get_latest_file_from_remote_dir(cls.REMOTE_BACKUPS_ROOT)
+        latest = disk.get_latest_file_from_dir(cls.REMOTE_BACKUPS_ROOT)
 
         if latest is None:
             return None
@@ -100,15 +99,18 @@ def backuper_factory(backup_type: str) -> AbstractBackuper:
             raise Exception('Неизвестный тип бекапа!')
 
 
-if __name__ == "__main__":
-
-    backup_type = sys.argv[1]
-    doing_type = sys.argv[2]
+@click.command()
+@click.argument("backup_type", type=click.Choice(['db', 'media'], case_sensitive=False))
+@click.argument("action", type=click.Choice(['send', 'download'], case_sensitive=False))
+def cli(backup_type: str, action: str):
+    """
+    Предоствляет интерфейс коммандной строки для управления бекапами.
+    """
 
     try:
         backuper = backuper_factory(backup_type)
 
-        match doing_type:
+        match action:
             case 'send':
                 backuper.send()
                 print('Бекап был успешно отправлен на диск!')
@@ -133,3 +135,7 @@ if __name__ == "__main__":
     except FileNotFoundError as error:
         print("Не удалось найти файл!")
         print(error)
+
+
+if __name__ == "__main__":
+    cli()
