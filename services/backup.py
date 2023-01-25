@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
 
-from yadisk.exceptions import PathExistsError
+from yadisk.exceptions import PathExistsError, YaDiskError
 
 from yandex_disk import YandexDisk
 
@@ -19,12 +19,12 @@ class AbstractBackuper(ABC):
 
     @classmethod
     @abstractmethod
-    def download(cls):
+    def download(cls) -> str:
         pass
 
 
 class MediaBackuper(AbstractBackuper):
-    REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "media_backups/"
+    REMOTE_BACKUPS_ROOT = "media_backups/"
     LOCAL_BACKUPS_ROOT = os.path.abspath('media/')
 
     @classmethod
@@ -36,7 +36,7 @@ class MediaBackuper(AbstractBackuper):
         os.remove('media.zip')
 
     @classmethod
-    def download(cls):
+    def download(cls) -> str:
         disk = YandexDisk()
         latest = disk.get_latest_file_from_remote_dir(cls.REMOTE_BACKUPS_ROOT)
 
@@ -51,7 +51,7 @@ class MediaBackuper(AbstractBackuper):
 
 class DatabaseBackuper(AbstractBackuper):
     LOCAL_BACKUPS_ROOT = '/backups/'
-    REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "backups/"
+    REMOTE_BACKUPS_ROOT = "backups/"
 
     @classmethod
     def send(cls):
@@ -61,7 +61,7 @@ class DatabaseBackuper(AbstractBackuper):
         disk.upload(backup_source_path, cls.REMOTE_BACKUPS_ROOT + backup_name)
 
     @classmethod
-    def download(cls):
+    def download(cls) -> str:
         disk = YandexDisk()
         latest = disk.get_latest_file_from_remote_dir(cls.REMOTE_BACKUPS_ROOT)
 
@@ -87,8 +87,8 @@ class DatabaseBackuper(AbstractBackuper):
         return root + str(Path(link).readlink())
 
 
-def backuper_factory(backuper_type: str) -> AbstractBackuper:
-    match backuper_type:
+def backuper_factory(backup_type: str) -> AbstractBackuper:
+    match backup_type:
 
         case 'db':
             return DatabaseBackuper
@@ -97,7 +97,7 @@ def backuper_factory(backuper_type: str) -> AbstractBackuper:
             return MediaBackuper
 
         case _:
-            raise Exception('Invalid backuper type!')
+            raise Exception('Неизвестный тип бекапа!')
 
 
 if __name__ == "__main__":
@@ -125,3 +125,11 @@ if __name__ == "__main__":
 
     except PathExistsError:
         print('Бекап, который вы хотите отправить уже лежит на диске!')
+
+    except YaDiskError as error:
+        print("Ошибка взаимодействия с Яндекс Диском!")
+        print(error)
+
+    except FileNotFoundError as error:
+        print("Не удалось найти файл!")
+        print(error)
