@@ -16,12 +16,12 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ('slug', 'title', 'year_of_writing', 'author', 'description', 'file', 'cover', 'genres')
+        exclude = ('id', 'creation_time')
         read_only_field = ('slug',)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('slug', 'name', 'surname', 'image', 'description')
+        exclude = ('id',)
         read_only_fields = ('slug',)

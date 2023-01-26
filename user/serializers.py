@@ -18,7 +18,7 @@ class CommentGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'book', 'user', 'score', 'text')
+        fields = '__all__'
         read_only_fields = ('id', 'score', 'text')
 
 
@@ -28,7 +28,7 @@ class CommentSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('book', 'user', 'score', 'text')
+        fields = '__all__'
 
 
 class ReadingGetSerializer(serializers.ModelSerializer):
@@ -37,7 +37,7 @@ class ReadingGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reading
-        fields = ('id', 'user', 'book')
+        exclude = ('creation_time',)
 
 
 class ReadingSetSerializer(serializers.ModelSerializer):
@@ -46,4 +46,4 @@ class ReadingSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reading
-        fields = ('id', 'book', 'user')
+        exclude = ('creation_time', )
