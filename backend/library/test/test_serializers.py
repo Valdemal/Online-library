@@ -5,8 +5,8 @@ import tempfile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
-from library.models import Author, Book
-from library.serializers import AuthorSerializer, BookSerializer
+from backend.library.models import Author, Book
+from backend.library.serializers import AuthorSerializer, BookSerializer
 
 
 def create_file(extension: str) -> InMemoryUploadedFile:

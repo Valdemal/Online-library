@@ -12,11 +12,12 @@ services:
 
   django:
     container_name: online_library_django
-    build: .
+    build: ./backend
     command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app
-      - static_volume:/usr/src/app/static
+      - ./backend:/usr/src/app
+      - static_volume:/usr/src/static
+      - media_volume:/usr/src/media
       - /var/opt/pgbackups:/backups
     expose:
       - 8000
@@ -29,7 +30,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - static_volume:/usr/src/app/static
+      - static_volume:/usr/src/static
+      - media_volume:/usr/src/media
     depends_on:
       - django
 
@@ -47,3 +49,4 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:

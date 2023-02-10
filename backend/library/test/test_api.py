@@ -1,12 +1,12 @@
-from user.models import User
+from backend.user.models import User
 
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from library.models import Author, Book
-from library.serializers import BookSerializer, AuthorSerializer
-from library.test.test_serializers import create_file
+from backend.library.models import Author, Book
+from backend.library.serializers import BookSerializer, AuthorSerializer
+from backend.library.test.test_serializers import create_file
 
 
 class BooksAPITest(APITestCase):

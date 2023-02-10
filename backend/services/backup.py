@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import click
-from yadisk.exceptions import PathExistsError, YaDiskError
+
 from yandex_disk import YandexDisk
 
 
@@ -23,8 +23,8 @@ class AbstractBackuper(ABC):
 
 
 class MediaBackuper(AbstractBackuper):
-    REMOTE_BACKUPS_ROOT = "media_backups/"
-    LOCAL_BACKUPS_ROOT = os.path.abspath('media/')
+    REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "media_backups/"
+    LOCAL_BACKUPS_ROOT = os.path.abspath('/media/')
 
     @classmethod
     def send(cls):
@@ -50,7 +50,7 @@ class MediaBackuper(AbstractBackuper):
 
 class DatabaseBackuper(AbstractBackuper):
     LOCAL_BACKUPS_ROOT = '/backups/'
-    REMOTE_BACKUPS_ROOT = 'backups/'
+    REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + 'backups/'
 
     @classmethod
     def send(cls):
@@ -107,34 +107,22 @@ def cli(backup_type: str, action: str):
     Предоствляет интерфейс коммандной строки для управления бекапами.
     """
 
-    try:
-        backuper = backuper_factory(backup_type)
+    backuper = backuper_factory(backup_type)
 
-        match action:
-            case 'send':
-                backuper.send()
-                print('Бекап был успешно отправлен на диск!')
+    match action:
+        case 'send':
+            backuper.send()
+            print('Бекап был успешно отправлен на диск!')
 
-            case 'download':
-                path = backuper.download()
-                if path is not None:
-                    print('Полученный из диска бекап сохранен в:' + path)
-                else:
-                    print('В удаленном хранилище нет бекапов!')
+        case 'download':
+            path = backuper.download()
+            if path is not None:
+                print('Полученный из диска бекап сохранен в:' + path)
+            else:
+                print('В удаленном хранилище нет бекапов!')
 
-            case _:
-                print('Неизвестное действие!')
-
-    except PathExistsError:
-        print('Бекап, который вы хотите отправить уже лежит на диске!')
-
-    except YaDiskError as error:
-        print("Ошибка взаимодействия с Яндекс Диском!")
-        print(error)
-
-    except FileNotFoundError as error:
-        print("Не удалось найти файл!")
-        print(error)
+        case _:
+            print('Неизвестное действие!')
 
 
 if __name__ == "__main__":
