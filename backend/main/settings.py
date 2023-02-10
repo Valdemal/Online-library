@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Внутренние приложения
     'library.apps.LibraryConfig',
     'user.apps.UserConfig',
+    'services',
 ]
 
 MIDDLEWARE = [

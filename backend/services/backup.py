@@ -4,9 +4,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
 
-import click
-
-from yandex_disk import YandexDisk
+from django.conf import settings
+from .yandex_disk import YandexDisk
 
 
 class AbstractBackuper(ABC):
@@ -24,7 +23,7 @@ class AbstractBackuper(ABC):
 
 class MediaBackuper(AbstractBackuper):
     REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "media_backups/"
-    LOCAL_BACKUPS_ROOT = os.path.abspath('/media/')
+    LOCAL_BACKUPS_ROOT = str(settings.MEDIA_ROOT)
 
     @classmethod
     def send(cls):
@@ -43,7 +42,7 @@ class MediaBackuper(AbstractBackuper):
             return None
 
         desdination_path = cls.LOCAL_BACKUPS_ROOT + '.zip'
-        disk.download(latest.path, desdination_path)
+        disk.download(latest.path, str(desdination_path))
 
         return desdination_path
 
@@ -97,33 +96,3 @@ def backuper_factory(backup_type: str) -> AbstractBackuper:
 
         case _:
             raise Exception('Неизвестный тип бекапа!')
-
-
-@click.command()
-@click.argument("backup_type", type=click.Choice(['db', 'media'], case_sensitive=False))
-@click.argument("action", type=click.Choice(['send', 'download'], case_sensitive=False))
-def cli(backup_type: str, action: str):
-    """
-    Предоствляет интерфейс коммандной строки для управления бекапами.
-    """
-
-    backuper = backuper_factory(backup_type)
-
-    match action:
-        case 'send':
-            backuper.send()
-            print('Бекап был успешно отправлен на диск!')
-
-        case 'download':
-            path = backuper.download()
-            if path is not None:
-                print('Полученный из диска бекап сохранен в:' + path)
-            else:
-                print('В удаленном хранилище нет бекапов!')
-
-        case _:
-            print('Неизвестное действие!')
-
-
-if __name__ == "__main__":
-    cli()
