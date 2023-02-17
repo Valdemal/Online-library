@@ -5,20 +5,19 @@ services:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - /var/opt/pgbackups:/backups
+      - postgres_backups:/backups
     env_file: .env
     expose:
       - 5432
 
   django:
-    container_name: online_library_django
     build: ./backend
     command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./backend:/usr/src/app
       - static_volume:/usr/src/static
       - media_volume:/usr/src/media
-      - /var/opt/pgbackups:/backups
+      - postgres_backups:/backups
     expose:
       - 8000
     env_file: .env
@@ -39,14 +38,68 @@ services:
     image: prodrigestivill/postgres-backup-local
     restart: always
     volumes:
-      - /var/opt/pgbackups:/backups
+      - postgres_backups:/backups
     links:
       - postgres
     depends_on:
       - postgres
     env_file: .env
 
+# Celery
+  redis:
+    image: redis
+    restart: always
+
+  celery-worker:
+    build:
+      context: ./backend
+    command: celery -A main worker --loglevel=info
+    volumes:
+      - ./backend:/usr/src/app
+      - media_volume:/usr/src/media
+      - static_volume:/usr/src/static
+      - postgres_backups:/backups
+    env_file: .env
+    links:
+        - redis
+    depends_on:
+        - redis
+    restart: always
+
+  celery-beat:
+    build:
+      context: ./backend
+    command: celery -A main beat --loglevel=info
+    volumes:
+      - ./backend:/usr/src/app
+      - media_volume:/usr/src/media
+      - static_volume:/usr/src/static
+      - postgres_backups:/backups
+    env_file: .env
+    links:
+        - redis
+        - celery-worker
+    depends_on:
+        - redis
+        - celery-worker
+    restart: always
+
+  flower:
+    image: mher/flower
+    env_file: .env
+    ports:
+      - 8888:8888
+    links:
+      - redis
+      - celery-worker
+      - celery-beat
+    depends_on:
+      - redis
+      - celery-worker
+      - celery-beat
+
 volumes:
   postgres_data:
+  postgres_backups:
   static_volume:
   media_volume:

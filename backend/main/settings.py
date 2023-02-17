@@ -174,5 +174,11 @@ DJOSER = {
 
 # corsheaders
 
-# Пока так
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# celery
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_BROKER_URL')
+# в crontab всегда используется utc даже если изменить timezone
+CELERY_TIMEZONE = 'UTC'

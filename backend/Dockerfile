@@ -8,18 +8,19 @@ ENV PYTHONBUFFERED=1
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev
 
+# install dependencies
 RUN pip install --upgrade pip
-COPY requirements.txt .
+COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY .. .
-
-COPY entrypoint.sh .
+# copy entrypoint
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
 
 # copy project
-COPY .. .
+COPY . .
 
-# run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+# пока так, потому что entripoint.sh видите-ли не найден
+CMD python manage.py migrate
+#ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

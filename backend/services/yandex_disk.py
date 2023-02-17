@@ -25,38 +25,3 @@ class YandexDisk(YaDisk):
         files.sort(key=lambda file: file.created)
 
         return files[-1] if len(files) != 0 else None
-
-    # методы (не все) переопределены для изоляции приложения его директорией
-    #
-    # def exists(self, path, **kwargs):
-    #     return super().exists(self.APP_ROOT + path, **kwargs)
-    #
-    # def get_type(self, path, **kwargs):
-    #     return super().get_type(self.APP_ROOT + path, **kwargs)
-    #
-    # def is_file(self, path, **kwargs):
-    #     return super().is_file(self.APP_ROOT + path, **kwargs)
-    #
-    # def is_dir(self, path, **kwargs):
-    #     return super().is_dir(self.APP_ROOT + path, **kwargs)
-    #
-    # def listdir(self, path, **kwargs):
-    #     return super().listdir(self.APP_ROOT + path, **kwargs)
-    #
-    # def get_upload_link(self, path, **kwargs):
-    #     return super().get_upload_link(self.APP_ROOT + path, **kwargs)
-    #
-    # def upload(self, path_or_file, dst_path, **kwargs):
-    #     return super().upload(path_or_file, self.APP_ROOT + dst_path, **kwargs)
-    #
-    # def get_download_link(self, path, **kwargs):
-    #     return super().get_download_link(self.APP_ROOT + path, **kwargs)
-    #
-    # def download(self, src_path, path_or_file, **kwargs):
-    #     return super().download(self.APP_ROOT + src_path, path_or_file)
-    #
-    # def remove(self, path, **kwargs):
-    #     return super().remove(self.APP_ROOT + path, **kwargs)
-    #
-    # def mkdir(self, path, **kwargs):
-    #     return super().mkdir(self.APP_ROOT + path, **kwargs)

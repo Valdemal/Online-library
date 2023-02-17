@@ -23,15 +23,16 @@ class AbstractBackuper(ABC):
 
 class MediaBackuper(AbstractBackuper):
     REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "media_backups/"
-    LOCAL_BACKUPS_ROOT = str(settings.MEDIA_ROOT)
+    LOCAL_BACKUPS_ROOT = settings.MEDIA_ROOT
 
     @classmethod
     def send(cls):
         disk = YandexDisk()
-        shutil.make_archive('media', 'zip', cls.LOCAL_BACKUPS_ROOT)
+        shutil.make_archive('media', 'zip', str(cls.LOCAL_BACKUPS_ROOT))
         upload_file_path = cls.REMOTE_BACKUPS_ROOT + f'media-{datetime.now().strftime("%d-%m-%Y-%H:%M")}'
-        disk.upload('media.zip', upload_file_path)
-        os.remove('media.zip')
+        archive_path = str((Path.cwd() / 'media.zip').absolute())
+        disk.upload(archive_path, upload_file_path)
+        os.remove(archive_path)
 
     @classmethod
     def download(cls) -> str:
@@ -41,7 +42,7 @@ class MediaBackuper(AbstractBackuper):
         if latest is None:
             return None
 
-        desdination_path = cls.LOCAL_BACKUPS_ROOT + '.zip'
+        desdination_path = str(cls.LOCAL_BACKUPS_ROOT) + '.zip'
         disk.download(latest.path, str(desdination_path))
 
         return desdination_path
