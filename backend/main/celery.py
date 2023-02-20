@@ -1,6 +1,6 @@
 import os
 
-from celery import Celery
+from celery import Celery, signals
 from celery.schedules import crontab
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
@@ -18,3 +18,9 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=20, minute=35)
     }
 }
+
+
+@signals.setup_logging.connect
+def on_celery_setup_logging(**kwargs):
+    """Подключение логгера (чудеса да и только)"""
+    pass

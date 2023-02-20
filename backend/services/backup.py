@@ -3,8 +3,10 @@ import shutil
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
+from typing import Type
 
 from django.conf import settings
+
 from .yandex_disk import YandexDisk
 
 
@@ -17,13 +19,18 @@ class AbstractBackuper(ABC):
 
     @classmethod
     @abstractmethod
-    def download(cls) -> str:
+    def download(cls) -> str | None:
         pass
+
+    # тип бекапа в родительном падеже
+    backup_type_annotation: str = None
 
 
 class MediaBackuper(AbstractBackuper):
     REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + "media_backups/"
     LOCAL_BACKUPS_ROOT = settings.MEDIA_ROOT
+
+    backup_type_annotation = 'медиа'
 
     @classmethod
     def send(cls):
@@ -35,22 +42,24 @@ class MediaBackuper(AbstractBackuper):
         os.remove(archive_path)
 
     @classmethod
-    def download(cls) -> str:
+    def download(cls) -> str | None:
         disk = YandexDisk()
         latest = disk.get_latest_file_from_dir(cls.REMOTE_BACKUPS_ROOT)
 
         if latest is None:
             return None
 
-        desdination_path = str(cls.LOCAL_BACKUPS_ROOT) + '.zip'
-        disk.download(latest.path, str(desdination_path))
+        destination_path = str(cls.LOCAL_BACKUPS_ROOT) + '.zip'
+        disk.download(latest.path, str(destination_path))
 
-        return desdination_path
+        return destination_path
 
 
 class DatabaseBackuper(AbstractBackuper):
     LOCAL_BACKUPS_ROOT = '/backups/'
     REMOTE_BACKUPS_ROOT = YandexDisk.APP_ROOT + 'backups/'
+
+    backup_type_annotation = 'базы данных'
 
     @classmethod
     def send(cls):
@@ -60,24 +69,24 @@ class DatabaseBackuper(AbstractBackuper):
         disk.upload(backup_source_path, cls.REMOTE_BACKUPS_ROOT + backup_name)
 
     @classmethod
-    def download(cls) -> str:
+    def download(cls) -> str | None:
         disk = YandexDisk()
         latest = disk.get_latest_file_from_dir(cls.REMOTE_BACKUPS_ROOT)
 
         if latest is None:
             return None
 
-        desdination_dir = cls.LOCAL_BACKUPS_ROOT + 'cloud/'
+        destination_dir = cls.LOCAL_BACKUPS_ROOT + 'cloud/'
 
-        if not os.path.exists(desdination_dir):
-            os.makedirs(desdination_dir)
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
 
-        desdination_name = os.path.basename(latest.path)
-        desdination_path = desdination_dir + desdination_name
+        destination_name = os.path.basename(latest.path)
+        destination_path = destination_dir + destination_name
 
-        disk.download(latest.path, desdination_path)
+        disk.download(latest.path, destination_path)
 
-        return desdination_path
+        return destination_path
 
     @classmethod
     def _get_path_to_latest(cls) -> str:
@@ -86,7 +95,7 @@ class DatabaseBackuper(AbstractBackuper):
         return root + str(Path(link).readlink())
 
 
-def backuper_factory(backup_type: str) -> AbstractBackuper:
+def backuper_factory(backup_type: str) -> Type[AbstractBackuper]:
     match backup_type:
 
         case 'db':

@@ -2,6 +2,8 @@ import os
 import dotenv
 from pathlib import Path
 
+from main.utils import JsonFormatter
+
 # Подгружаем переменные окружения
 dotenv.load_dotenv()
 
@@ -138,6 +140,57 @@ STATIC_URL = 'static/'
 MEDIA_ROOT = BASE_DIR.parent / 'media/'
 MEDIA_URL = '/media/'
 
+# logging
+
+LOG_FILES_DIR = BASE_DIR.parent / 'logs/'
+DEFAULT_LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'main': {
+            'format': '[{levelname}]({asctime}) - {message}',
+            'style': '{',
+        },
+        'json_formatter': {
+            '()': JsonFormatter,
+        }
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main',
+        },
+        'django_file': {
+            'class': 'logging.FileHandler',
+            'filename': str(LOG_FILES_DIR / 'django.json'),
+            'formatter': 'json_formatter',
+        },
+        'celery_file':  {
+            'class': 'logging.FileHandler',
+            'filename': str(LOG_FILES_DIR / 'celery.json'),
+            'formatter': 'json_formatter',
+        }
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'django_file'],
+            'level': DEFAULT_LOG_LEVEL,
+            'propagate': True
+        },
+        'celery': {
+            'handlers': ['console', 'celery_file'],
+            'level': DEFAULT_LOG_LEVEL,
+            'propagate': True
+        }
+    }
+}
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -175,7 +228,6 @@ DJOSER = {
 # corsheaders
 
 CORS_ORIGIN_ALLOW_ALL = True
-
 
 # celery
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')

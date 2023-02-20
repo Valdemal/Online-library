@@ -18,6 +18,7 @@ services:
       - static_volume:/usr/src/static
       - media_volume:/usr/src/media
       - postgres_backups:/backups
+      - logs:/usr/src/logs
     expose:
       - 8000
     env_file: .env
@@ -58,6 +59,7 @@ services:
       - ./backend:/usr/src/app
       - media_volume:/usr/src/media
       - static_volume:/usr/src/static
+      - logs:/usr/src/logs
       - postgres_backups:/backups
     env_file: .env
     links:
@@ -74,6 +76,7 @@ services:
       - ./backend:/usr/src/app
       - media_volume:/usr/src/media
       - static_volume:/usr/src/static
+      - logs:/usr/src/logs
       - postgres_backups:/backups
     env_file: .env
     links:
@@ -88,7 +91,7 @@ services:
     image: mher/flower
     env_file: .env
     ports:
-      - 8888:8888
+      - "8888:8888"
     links:
       - redis
       - celery-worker
@@ -103,3 +106,4 @@ volumes:
   postgres_backups:
   static_volume:
   media_volume:
+  logs:
