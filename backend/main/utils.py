@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict
 
 from django.template.defaultfilters import slugify as django_slugify
 from pythonjsonlogger import jsonlogger
@@ -31,3 +32,16 @@ class JsonFormatter(jsonlogger.JsonFormatter):
             log_record['level'] = log_record['level'].upper()
         else:
             log_record['level'] = record.levelname
+
+
+def get_env_variables(filename: str) -> Dict[str, str]:
+    variables = {}
+    with open(filename) as file:
+        for line in file:
+            if line.startswith('#') or not line.strip():
+                continue
+
+            key, value = line.strip().split('=', 1)
+            variables[key] = value
+
+    return variables

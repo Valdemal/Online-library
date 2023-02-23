@@ -8,6 +8,7 @@ from django.db import models
 
 from main.utils import slugify_unicode
 
+
 def get_model_with_slug(slug_max_len: int):
     """
     Возвращает абстрактную модель с уже "вшитым" полем slug
@@ -15,7 +16,7 @@ def get_model_with_slug(slug_max_len: int):
     """
 
     class SlugModel(models.Model):
-        slug = models.SlugField(max_length=slug_max_len, unique=True, editable=False, verbose_name='URL',)
+        slug = models.SlugField(max_length=slug_max_len, unique=True, editable=False, verbose_name='URL', )
 
         def slugify(self) -> str:
             return slugify_unicode(str(self))
