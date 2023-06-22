@@ -14,7 +14,8 @@ class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
     permission_classes = IsStaffOrReadOnly,
     ordering_fields = 'title', 'year_of_writing', 'author'
-    filter_backends = DjangoFilterBackend, filters.OrderingFilter
+    search_fields = 'title', 'author__name', 'author__surname'
+    filter_backends = DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter
     filterset_class = BookFilter
 
 
@@ -24,7 +25,8 @@ class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
     permission_classes = IsStaffOrReadOnly,
     ordering_fields = 'name', 'surname'
-    filter_backends = DjangoFilterBackend, filters.OrderingFilter
+    search_fields = 'name', 'surname'
+    filter_backends = DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter
     filterset_class = AuthorFilter
 
 
@@ -34,5 +36,6 @@ class GenreViewSet(ModelViewSet):
     queryset = Genre.objects.all()
     permission_classes = IsStaffOrReadOnly,
     ordering_fields = 'name',
-    filter_backends = filters.OrderingFilter,
+    search_fields = 'name',
+    filter_backends = filters.OrderingFilter, filters.SearchFilter
 
