@@ -5,6 +5,7 @@ from user.models import Reading, Comment
 
 class ReadingFilter(drf_filters.FilterSet):
     book = drf_filters.CharFilter(field_name='book__slug')
+    author = drf_filters.CharFilter(field_name='book__author__slug')
     user = drf_filters.CharFilter(field_name='user__username')
 
     class Meta:
@@ -14,6 +15,7 @@ class ReadingFilter(drf_filters.FilterSet):
 
 class CommentFilter(drf_filters.FilterSet):
     book = drf_filters.CharFilter(field_name='book__slug')
+    author = drf_filters.CharFilter(field_name='book__author__slug')
     user = drf_filters.CharFilter(field_name='user__username')
     score = drf_filters.RangeFilter()
 
