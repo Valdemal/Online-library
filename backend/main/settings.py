@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django_filters',
 
     # Внутренние приложения
-    'library.apps.LibraryConfig',
-    'user.apps.UserConfig',
+    'library',
+    'user',
     'services',
 ]
 
