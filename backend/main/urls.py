@@ -3,12 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from django.views.generic import TemplateView
-
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-
-from rest_framework import permissions
+from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from rest_framework.routers import DefaultRouter
 
 from library.views import AuthorViewSet, BookViewSet, GenreViewSet
@@ -29,22 +24,9 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.authtoken')),
 ]
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Online-library",
-        default_version="v1",
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny, ]
-)
-
 urlpatterns += [
-    path('openapi', schema_view.as_view(), name='openapi-schema'),
-    path('api/swagger/', TemplateView.as_view(
-        template_name='../templates/swagger-ui.html',
-        extra_context={'schema_url': 'openapi-schema'}
-    ), name='swagger-ui'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

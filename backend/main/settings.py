@@ -36,8 +36,9 @@ INSTALLED_APPS = [
     'rest_framework_csv',
     'djoser',
     'corsheaders',
-    'drf_yasg',
     'django_filters',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',  # required for Django collectstatic discovery
 
     # Внутренние приложения
     'library.apps.LibraryConfig',
@@ -169,7 +170,7 @@ LOGGING = {
             'filename': str(LOG_FILES_DIR / 'django.json'),
             'formatter': 'json_formatter',
         },
-        'celery_file':  {
+        'celery_file': {
             'class': 'logging.FileHandler',
             'filename': str(LOG_FILES_DIR / 'celery.json'),
             'formatter': 'json_formatter',
@@ -189,7 +190,6 @@ LOGGING = {
         }
     }
 }
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -216,6 +216,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework_csv.renderers.CSVRenderer',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
 }
@@ -236,3 +237,13 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_BROKER_URL')
 # в crontab всегда используется utc даже если изменить timezone
 CELERY_TIMEZONE = 'UTC'
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Online-library API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    'COMPONENT_SPLIT_REQUEST': True,
+}

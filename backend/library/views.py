@@ -23,6 +23,7 @@ class BookViewSet(ModelViewSet):
     search_fields = 'title', 'author__name', 'author__surname'
     filter_backends = DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter
     filterset_class = BookFilter
+    parser_classes = MultiPartParser,
 
 
 class AuthorViewSet(ModelViewSet):
