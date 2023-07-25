@@ -1,6 +1,7 @@
 from django.db.models import Avg, Count, Q, F
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
 from library.filters import BookFilter, AuthorFilter
@@ -37,6 +38,7 @@ class AuthorViewSet(ModelViewSet):
     search_fields = 'name', 'surname'
     filter_backends = DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter
     filterset_class = AuthorFilter
+    parser_classes = MultiPartParser,
 
 
 class GenreViewSet(ModelViewSet):

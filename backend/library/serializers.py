@@ -10,9 +10,13 @@ class GenreSerializer(serializers.ModelSerializer):
         read_only_fields = ('slug',)
 
 
+class RelatedGenreSerializer(serializers.SlugRelatedField, GenreSerializer):
+    pass
+
+
 class BookSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(many=False, queryset=Author.objects.all(), slug_field='slug')
-    genres = GenreSerializer(many=True, required=False)  # Оно как-то само фильтрует, я в шоке!
+    genres = RelatedGenreSerializer(many=True, required=False, queryset=Genre.objects.all(), slug_field='slug')
     score = serializers.FloatField(read_only=True)
     popularity = serializers.IntegerField(read_only=True)
 

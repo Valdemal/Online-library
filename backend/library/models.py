@@ -95,7 +95,7 @@ class Book(get_model_with_slug(320)):
         validators=[validate_image_file_extension]
     )
 
-    genres = models.ManyToManyField(Genre, blank=True, verbose_name='Жанры')
+    genres = models.ManyToManyField(Genre, blank=True, verbose_name='Жанры', related_name='genres')
 
     def __str__(self):
         return self.title
