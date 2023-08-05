@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres
+    container_name: online-library-postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_backups:/backups
@@ -11,6 +12,7 @@ services:
       - 5432
 
   django:
+    container_name: online-library-django
     build: ./backend
     command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -26,6 +28,7 @@ services:
       - postgres
 
   nginx:
+    container_name: online-library-nginx
     build: ./nginx
     ports:
       - "80:80"
@@ -37,6 +40,7 @@ services:
 
   pgbackups:
     image: prodrigestivill/postgres-backup-local
+    container_name: online-library-pgbackups
     restart: always
     volumes:
       - postgres_backups:/backups
@@ -49,9 +53,11 @@ services:
 # Celery
   redis:
     image: redis
+    container_name: online-library-redis
     restart: always
 
   celery-worker:
+    container_name: online-library-celery-worker
     build:
       context: ./backend
     command: celery -A main worker --loglevel=info
@@ -69,6 +75,7 @@ services:
     restart: always
 
   celery-beat:
+    container_name: online-library-celery-beat
     build:
       context: ./backend
     command: celery -A main beat --loglevel=info
@@ -88,6 +95,7 @@ services:
     restart: always
 
   flower:
+    container_name: online-library-flower
     image: mher/flower
     env_file: .env
     ports:
