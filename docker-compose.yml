@@ -16,7 +16,7 @@ services:
     build: ./backend
     command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend:/usr/src/backend
       - static_volume:/usr/src/static
       - media_volume:/usr/src/media
       - postgres_backups:/backups
@@ -27,6 +27,14 @@ services:
     depends_on:
       - postgres
 
+  vue:
+    container_name: online-library-vue
+    build: ./frontend
+    volumes:
+      - frontend:/usr/src/frontend
+    depends_on:
+      - django
+
   nginx:
     container_name: online-library-nginx
     build: ./nginx
@@ -35,8 +43,10 @@ services:
     volumes:
       - static_volume:/usr/src/static
       - media_volume:/usr/src/media
+      - frontend:/usr/src/frontend
     depends_on:
       - django
+      - vue
 
   pgbackups:
     image: prodrigestivill/postgres-backup-local
@@ -62,7 +72,7 @@ services:
       context: ./backend
     command: celery -A main worker --loglevel=info
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend:/usr/src/backend
       - media_volume:/usr/src/media
       - static_volume:/usr/src/static
       - logs:/usr/src/logs
@@ -80,7 +90,7 @@ services:
       context: ./backend
     command: celery -A main beat --loglevel=info
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend:/usr/src/backend
       - media_volume:/usr/src/media
       - static_volume:/usr/src/static
       - logs:/usr/src/logs
@@ -115,3 +125,4 @@ volumes:
   static_volume:
   media_volume:
   logs:
+  frontend:
