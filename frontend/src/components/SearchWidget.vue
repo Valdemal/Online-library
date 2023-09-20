@@ -1,0 +1,32 @@
+<template>
+  <div class="subheader flex-center">
+    <div class="search flex-right">
+      <input placeholder="Поиск">
+      <span>▼</span>
+      <span>🔍</span>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+.search {
+  width: 100%;
+}
+
+.search input {
+  width: 100%;
+  font-size: 15px;
+  background-color: #D9D9D9;
+  border: none;
+  border-bottom: 1px solid #464646;
+  outline: none;
+}
+
+.search span {
+  margin-left: 5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+</style>
