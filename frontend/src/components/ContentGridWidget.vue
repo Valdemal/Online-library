@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <main>
     <div class="content-grid">
@@ -10,7 +6,12 @@
   </main>
 </template>
 
-<style>
+<style scoped>
+
+main {
+  margin: 10px 310px 0 122px;
+  min-height: 800px;
+}
 
 .content-grid {
   display: grid;

@@ -1,29 +1,28 @@
 <template>
   <ContentDetailWidget>
-    <template v-slot:title>
-      <div class="detail-subheader flex-center">
-        <div class="title flex-center">{{ model.title }}</div>
-        <div class="side-label flex-center">
-          <a href="/authors/slug">{{ author_name }}</a>
-        </div>
-      </div>
+    <template #title>
+      {{ model.title }}
     </template>
 
-    <template v-slot:content>
-      <div class="description">
+    <template #side-label>
+      <a href="/authors/slug">{{ author_name }}</a>
+    </template>
+
+    <template #content>
+      <DescriptionWidget>
         <div class="photo">
           <img :src="model.cover" :alt="model.title">
-          <div class="estimation">
+          <EstimationWidget>
             <div>🌟{{ model.score }}</div>
             <div>📚{{ model.popularity }}</div>
-          </div>
+          </EstimationWidget>
         </div>
         <div class="text book-text">{{ model.description }}</div>
-      </div>
+      </DescriptionWidget>
       <CommentsList/>
     </template>
 
-    <template v-slot:sidebar>
+    <template #sidebar>
       <img :src="model.author.image" :alt="author_name">
     </template>
   </ContentDetailWidget>
@@ -31,11 +30,13 @@
 
 <script>
 
-import CommentsList from '@/components/CommentsList.vue'
-import ContentDetailWidget from '@/layouts/ContentDetailWidget.vue'
+import CommentsList from '@/components/CommentList.vue'
+import ContentDetailWidget from '@/components/ContentDetailWidget.vue'
+import EstimationWidget from '@/components/BaseEstimation.vue'
+import DescriptionWidget from '@/components/BaseDescription.vue'
 
 export default {
-  components: { ContentDetailWidget, CommentsList },
+  components: { DescriptionWidget, EstimationWidget, ContentDetailWidget, CommentsList },
   data () {
     return {
       model: {

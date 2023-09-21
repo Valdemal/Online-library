@@ -2,13 +2,13 @@
     <router-view/>
 </template>
 
-<script setup>
-</script>
-
 <style>
+
 body {
   background-color: #F5F5F5;
   font-family: Roboto, sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
 a {
@@ -34,5 +34,4 @@ a:hover {
 .text {
   text-align: justify;
 }
-
 </style>

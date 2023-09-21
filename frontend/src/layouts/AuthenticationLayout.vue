@@ -1,13 +1,3 @@
-<script>
-import { defineComponent } from 'vue'
-import FooterWidget from '@/components/FooterWidget.vue'
-
-export default defineComponent({
-  name: 'AuthenticationLayout',
-  components: { FooterWidget }
-})
-</script>
-
 <template>
   <header class="flex-center">
     <div class="logo flex-center">
@@ -20,11 +10,31 @@ export default defineComponent({
   <footer-widget class="authorization-footer"/>
 </template>
 
+<script setup>
+import FooterWidget from '@/components/TheFooter.vue'
+</script>
+
 <style scoped>
 
 header {
   height: 80px;
   background-color: rgba(63, 159, 248, 0.7);
+}
+
+.logo {
+  width: 90px;
+  height: 80px;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+}
+
+.authorization-footer {
+  margin: 10px 260px 0 260px;
 }
 
 main {
@@ -97,22 +107,6 @@ main >>> .subtitle {
 main >>> .subtitle a {
   padding-left: 5px;
   padding-right: 5px;
-}
-
-.logo {
-  width: 90px;
-  height: 80px;
-  overflow: hidden;
-  justify-content: center;
-}
-
-.logo img {
-  width: 100%;
-  height: 100%;
-}
-
-.authorization-footer {
-  margin: 10px 260px 0 260px;
 }
 
 </style>

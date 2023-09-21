@@ -12,7 +12,7 @@
 
 <style>
 
-.content-grid .content-item {
+.content-item {
   height: 320px;
   margin-bottom: 10px;
   margin-left: 10px;
