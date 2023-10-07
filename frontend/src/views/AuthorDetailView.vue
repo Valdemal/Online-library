@@ -1,24 +1,24 @@
 <template>
   <ContentDetailWidget>
-    <template #title>{{ author_name }}</template>
+    <template #title>{{ author.name + ' ' + author.surname }}</template>
 
     <template #side-label>Книги</template>
 
     <template #content>
       <DescriptionWidget>
         <div class="photo">
-          <img :src="model.image" :alt="author_name">
+          <img :src="author.image" :alt="author.name + ' ' + author.surname">
           <EstimationWidget>
-            <div>🌟{{ model.score }}</div>
-            <div>📚{{ model.popularity }}</div>
+            <div>🌟{{ author.score }}</div>
+            <div>📚{{ author.popularity }}</div>
           </EstimationWidget>
         </div>
-        <div class="text">{{ model.description }}</div>
+        <div class="text">{{ author.description }}</div>
       </DescriptionWidget>
     </template>
 
     <template #sidebar>
-      <BookList/>
+      <BookList :author_slug="author.slug"/>
     </template>
   </ContentDetailWidget>
 </template>
@@ -29,29 +29,29 @@ import ContentDetailWidget from '@/components/ContentDetailWidget.vue'
 import BookList from '@/components/BookList.vue'
 import EstimationWidget from '@/components/BaseEstimation.vue'
 import DescriptionWidget from '@/components/BaseDescription.vue'
+import { Author } from '@/api/schemas'
 
 export default {
   components: { DescriptionWidget, EstimationWidget, BookList, ContentDetailWidget },
   data () {
     return {
-      model: {
-        name: 'Федор',
-        surname: 'Достоевский',
-        image: '/img/Достоевский.d8b22864.jpg',
-        score: 4.9,
-        popularity: 1500,
-        description: ' Фёдор Миха́йлович Достое́вский (30 октября [11 ноября] 1821, Москва — 28 января [9 февраля] 1881,\n' +
-          '          Санкт-Петербург[2]) — русский писатель, мыслитель, философ и публицист[3]. Член-корреспондент\n' +
-          '          Петербургской академии наук с 1877 года[4]. Классик мировой литературы, по данным ЮНЕСКО, один из самых\n' +
-          '          читаемых писателей в мире. Собрание сочинений Достоевского состоит из 12 романов, четырёх новелл, 16\n' +
-          '          рассказов и множества других произведений.'
-      }
+      author: Author
     }
   },
-  computed: {
-    author_name () {
-      return this.model.name + ' ' + this.model.surname
+  created () {
+    const slug = this.$route.params.slug
+    console.log(slug)
+    //   Получение данных по слагу
+    this.author = {
+      score: 3.9000000000000004,
+      popularity: 5,
+      slug: 'viktor-pelevin',
+      name: 'Виктор',
+      surname: 'Пелевин',
+      image: 'http://127.0.0.1/media/authors/images/322_original.jpeg',
+      description: 'Советский и российский писатель, эссеист. Заявил себя как автор романов в 1990-х годах такими работами как «Омон Ра», «Чапаев и Пустота» и «Generation „П“». С 2003 года выпускает в среднем по одной новой книге в год, многие из которых становились литературными событиями. Лауреат многочисленных литературных премий, среди которых «Золотой шар» (1990), «Малый Букер» (1993), «Национальный бестселлер» (2004), «Большая книга» (2010, 3-е место), премия Андрея Белого (2017).'
     }
   }
+
 }
 </script>

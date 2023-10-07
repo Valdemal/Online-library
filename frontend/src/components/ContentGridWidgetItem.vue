@@ -1,13 +1,13 @@
 <template>
-  <a href="/authors/slug">
     <div class="content-item">
       <slot></slot>
     </div>
-  </a>
 </template>
 
 <script>
-
+export default {
+  name: 'ContentGridWidgetItem'
+}
 </script>
 
 <style>
