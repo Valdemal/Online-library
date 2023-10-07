@@ -1,10 +1,10 @@
 <template>
-  <router-link :to="{name:'author-detail', params: {slug: schema.slug}}">
+  <router-link :to="{name:'author-detail', params: {slug: this.author.slug}}">
   <ContentItem>
-    <img :src="schema.image" :alt="fullname()">
+    <img :src="author.image" :alt="author.fullName">
     <div class="text">
-      <div class="name flex-center">{{ fullname() }}</div>
-      <div class="description"><p>{{ schema.description }}</p></div>
+      <div class="name flex-center">{{ author.fullName }}</div>
+      <div class="description"><p>{{ author.description }}</p></div>
     </div>
   </ContentItem>
   </router-link>
@@ -17,11 +17,9 @@ import { Author } from '@/api/schemas'
 export default {
   components: { ContentItem },
   props: {
-    schema: Author
-  },
-  methods: {
-    fullname () {
-      return this.schema.name + ' ' + this.schema.surname
+    author: {
+      type: Author,
+      required: true
     }
   }
 }

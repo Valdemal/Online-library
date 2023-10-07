@@ -6,7 +6,7 @@
 
     <template #side-label>
       <router-link :to="{name:'author-detail', params: {slug: author.slug}}">
-        {{ author.name + ' ' + author.surname }}
+        {{ author.fullName}}
       </router-link>
     </template>
 
@@ -25,7 +25,7 @@
     </template>
 
     <template #sidebar>
-      <img :src="author.image" :alt="author.name + ' ' + author.surname">
+      <img :src="author.image" :alt="author.fullName">
     </template>
   </ContentDetailWidget>
 </template>
@@ -42,15 +42,19 @@ export default {
   components: { DescriptionWidget, EstimationWidget, ContentDetailWidget, CommentsList },
   data () {
     return {
-      book: Book,
-      author: Author
+      book: {
+        type: Book
+      },
+      author: {
+        type: Author
+      }
     }
   },
   created () {
     const slug = this.$route.params.slug
     console.log(slug)
     //   Получение данных по слагу
-    this.book = {
+    this.book = new Book({
       author: 'viktor-pelevin',
       genres: [
         'roman',
@@ -64,8 +68,8 @@ export default {
       file: 'http://127.0.0.1/media/books/files/genration_p.pdf',
       year_of_writing: 1999,
       cover: 'http://127.0.0.1/media/books/covers/generation_p.jpg'
-    }
-    this.author = {
+    })
+    this.author = new Author({
       score: 3.9000000000000004,
       popularity: 5,
       slug: 'viktor-pelevin',
@@ -73,7 +77,7 @@ export default {
       surname: 'Пелевин',
       image: 'http://127.0.0.1/media/authors/images/322_original.jpeg',
       description: 'Советский и российский писатель, эссеист. Заявил себя как автор романов в 1990-х годах такими работами как «Омон Ра», «Чапаев и Пустота» и «Generation „П“». С 2003 года выпускает в среднем по одной новой книге в год, многие из которых становились литературными событиями. Лауреат многочисленных литературных премий, среди которых «Золотой шар» (1990), «Малый Букер» (1993), «Национальный бестселлер» (2004), «Большая книга» (2010, 3-е место), премия Андрея Белого (2017).'
-    }
+    })
   }
 
 }

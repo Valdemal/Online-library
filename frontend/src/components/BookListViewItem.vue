@@ -1,10 +1,10 @@
 <template>
-  <router-link :to="{name:'book-detail', params: {slug: schema.slug}}">
+  <router-link :to="{name:'book-detail', params: {slug: this.book.slug}}">
     <ContentItem>
-      <img src="{{ schema.cover }}" alt="{{ schema.title }}">
+      <img src="{{ book.cover }}" alt="{{ book.title }}">
       <div class="text">
-        <div class="name flex-center">{{ schema.title }}</div>
-        <div class="description"><p>{{ schema.description }}</p></div>
+        <div class="name flex-center">{{ book.title }}</div>
+        <div class="description"><p>{{ book.description }}</p></div>
       </div>
     </ContentItem>
   </router-link>
@@ -17,7 +17,10 @@ import { Book } from '@/api/schemas'
 export default {
   components: { ContentItem },
   props: {
-    schema: Book
+    book: {
+      type: Book,
+      required: true
+    }
   }
 }
 </script>

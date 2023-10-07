@@ -1,24 +1,43 @@
 <template>
   <div class="comment">
     <div class="photo">
-      <img src="../assets/Булгаков.jpg" alt="Булгаков">
+      <img :src="user.photo" :alt="user.username">
       <EstimationWidget>
-        <div>🌟{{ schema.score }}</div>
+        <div>🌟{{ comment.roundedScore() }}</div>
       </EstimationWidget>
     </div>
-    <div class="text">{{ schema.text }}</div>
+    <div class="text">{{ comment.text }}</div>
   </div>
 </template>
 
 <script>
 
 import EstimationWidget from '@/components/BaseEstimation.vue'
-import { Comment } from '@/api/schemas'
+import { Comment, User } from '@/api/schemas'
 
 export default {
   components: { EstimationWidget },
   props: {
-    schema: Comment
+    comment: {
+      type: Comment,
+      required: true
+    }
+  },
+  data () {
+    return {
+      user: {
+        type: User
+      }
+    }
+  },
+  created () {
+    // Получение данных пользователя по полю comment.user
+    this.user = new User({
+      username: 'vovan',
+      email: 'vovanex12@gmail.com',
+      photo: 'http://127.0.0.1/media/users/photos/%D0%9D%D0%B0_%D0%BF%D0%B0%D1%81%D0%BF%D0%BE%D1%80%D1%82.jpg',
+      is_staff: true
+    })
   }
 }
 

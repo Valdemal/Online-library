@@ -2,20 +2,20 @@
   <div class="book-list">
     <BookListItem
       v-for="book in books" :key="book.slug"
-      :schema="book"
+      :book="book"
     />
   </div>
 </template>
 
 <script>
 import BookListItem from '@/components/BookListItem.vue'
-import { Slug } from '@/api/schemas'
+import { Book } from '@/api/schemas'
 
 export default {
   components: { BookListItem },
   props: {
     author_slug: {
-      type: Slug,
+      type: String,
       required: false
     }
   },
@@ -54,7 +54,9 @@ export default {
           year_of_writing: 2011,
           cover: 'http://127.0.0.1/media/books/covers/snuff.jpg'
         }
-      ]
+      ].map((json) => {
+        return new Book(json)
+      })
     }
   }
 }

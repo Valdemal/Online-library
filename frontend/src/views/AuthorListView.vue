@@ -4,7 +4,7 @@
     <AuthorListViewItem
       v-for="author in authors"
       :key="author.slug"
-      :schema="author"
+      :author="author"
     />
   </ContentGridWidget>
 </template>
@@ -14,6 +14,7 @@
 import ContentGridWidget from '@/components/ContentGridWidget.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import AuthorListViewItem from '@/components/AuthorListViewItem.vue'
+import { Author } from '@/api/schemas'
 
 export default {
   components: { AuthorListViewItem, TheHeader, ContentGridWidget },
@@ -38,7 +39,9 @@ export default {
           image: 'http://127.0.0.1/media/authors/images/%D0%9F%D0%B8%D1%81%D0%B0%D1%82%D0%B5%D0%BB%D1%8C-%D0%9C%D0%B8%D1%85%D0%B0%D0%B8%D0%BB-%D0%95%D0%BB%D0%B8%D0%B7%D0%B0%D1%80%D0%BE%D0%B2.jpg',
           description: 'Русский писатель и автор-исполнитель. Лауреат литературных премий «Русский Букер» (за роман «Библиотекарь»), «Национальный бестселлер» (за роман «Земля») и Григорьевской поэтической премии.'
         }
-      ]
+      ].map((json) => {
+        return new Author(json)
+      })
     }
   }
 }

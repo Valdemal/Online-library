@@ -3,7 +3,7 @@
   <ContentGridWidget>
     <BookListViewItem
       v-for="book in books" :key="book.slug"
-      :schema="book"
+      :book="book"
     />
   </ContentGridWidget>
 </template>
@@ -13,6 +13,7 @@
 import ContentGridWidget from '@/components/ContentGridWidget.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import BookListViewItem from '@/components/BookListViewItem.vue'
+import { Book } from '@/api/schemas'
 
 export default {
   components: { BookListViewItem, TheHeader, ContentGridWidget },
@@ -51,7 +52,9 @@ export default {
           year_of_writing: 2011,
           cover: 'http://127.0.0.1/media/books/covers/snuff.jpg'
         }
-      ]
+      ].map((json) => {
+        return new Book(json)
+      })
     }
   }
 }

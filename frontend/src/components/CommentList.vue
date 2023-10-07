@@ -4,20 +4,20 @@
     <CommentListItem
       v-for="comment in comments"
       :key="comment.id"
-      :schema="comment"
+      :comment="comment"
     />
   </div>
 </template>
 
 <script>
 import CommentListItem from '@/components/CommentListItem.vue'
-import { Slug } from '@/api/schemas'
+import { Comment } from '@/api/schemas'
 
 export default {
   components: { CommentListItem },
   props: {
     book_slug: {
-      type: Slug,
+      type: String,
       required: false
     },
     username: {
@@ -44,7 +44,9 @@ export default {
           text: 'Здорово!!!',
           creation_time: '2022-12-18T04:18:33.102122+03:00'
         }
-      ]
+      ].map((json) => {
+        return new Comment(json)
+      })
     }
   }
 }

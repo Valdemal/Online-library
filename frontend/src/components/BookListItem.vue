@@ -1,13 +1,13 @@
 
 <template>
-  <router-link class="book-link" :to="{name:'book-detail', params: {slug: schema.slug}}">
+  <router-link class="book-link" :to="{name:'book-detail', params: {slug: this.book.slug}}">
     <div class="book flex-center">
-      <div class="name">{{ schema.title }}</div>
-      <div class="score" v-if="schema.score">
-        🌟{{ schema.score.toFixed(2) }}
+      <div class="name">{{ book.title }}</div>
+      <div class="score" v-if="book.score">
+        🌟{{ book.roundedScore() }}
       </div>
-      <div class="popularity" v-if="schema.popularity">
-        📚{{ schema.popularity }}
+      <div class="popularity" v-if="book.popularity">
+        📚{{ book.popularity }}
       </div>
     </div>
   </router-link>
@@ -19,7 +19,10 @@ import { Book } from '@/api/schemas'
 export default {
   components: { },
   props: {
-    schema: Book
+    book: {
+      type: Book,
+      required: true
+    }
   }
 }
 </script>
