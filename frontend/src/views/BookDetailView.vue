@@ -15,7 +15,7 @@
         <div class="photo">
           <img :src="book.cover" :alt="book.title">
           <EstimationWidget>
-            <div>🌟{{ book.score }}</div>
+            <div>🌟{{ book.roundedScore() }}</div>
             <div>📚{{ book.popularity }}</div>
           </EstimationWidget>
         </div>
