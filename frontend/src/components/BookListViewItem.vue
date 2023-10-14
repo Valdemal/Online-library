@@ -10,11 +10,11 @@
   </router-link>
 </template>
 
-<script>
+<script lang="ts">
 import ContentItem from '@/components/ContentGridWidgetItem.vue'
 import { Book } from '@/api/schemas'
-
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: { ContentItem },
   props: {
     book: {
@@ -22,5 +22,5 @@ export default {
       required: true
     }
   }
-}
+})
 </script>

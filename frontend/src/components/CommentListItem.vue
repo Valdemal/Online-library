@@ -10,12 +10,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
 import EstimationWidget from '@/components/BaseEstimation.vue'
 import { Comment, User } from '@/api/schemas'
+import { defineComponent } from 'vue'
 
-export default {
+interface State {
+  user: User | null
+}
+export default defineComponent({
   components: { EstimationWidget },
   props: {
     comment: {
@@ -23,11 +27,9 @@ export default {
       required: true
     }
   },
-  data () {
+  data (): State {
     return {
-      user: {
-        type: User
-      }
+      user: null
     }
   },
   created () {
@@ -39,7 +41,7 @@ export default {
       is_staff: true
     })
   }
-}
+})
 
 </script>
 

@@ -9,11 +9,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CommentListItem from '@/components/CommentListItem.vue'
 import { Comment } from '@/api/schemas'
-
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: { CommentListItem },
   props: {
     book_slug: {
@@ -49,7 +49,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>

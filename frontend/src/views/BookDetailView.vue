@@ -30,25 +30,24 @@
   </ContentDetailWidget>
 </template>
 
-<script>
+<script lang="ts">
 
 import CommentsList from '@/components/CommentList.vue'
 import ContentDetailWidget from '@/components/ContentDetailWidget.vue'
 import EstimationWidget from '@/components/BaseEstimation.vue'
 import DescriptionWidget from '@/components/BaseDescription.vue'
 import { Author, Book } from '@/api/schemas'
+import { defineComponent } from 'vue'
 
-export default {
+interface State {
+  book: Book | null
+  author: Author | null
+}
+
+export default defineComponent({
   components: { DescriptionWidget, EstimationWidget, ContentDetailWidget, CommentsList },
-  data () {
-    return {
-      book: {
-        type: Book
-      },
-      author: {
-        type: Author
-      }
-    }
+  data () : State {
+    return { book: null, author: null }
   },
   created () {
     const slug = this.$route.params.slug
@@ -79,8 +78,7 @@ export default {
       description: 'Советский и российский писатель, эссеист. Заявил себя как автор романов в 1990-х годах такими работами как «Омон Ра», «Чапаев и Пустота» и «Generation „П“». С 2003 года выпускает в среднем по одной новой книге в год, многие из которых становились литературными событиями. Лауреат многочисленных литературных премий, среди которых «Золотой шар» (1990), «Малый Букер» (1993), «Национальный бестселлер» (2004), «Большая книга» (2010, 3-е место), премия Андрея Белого (2017).'
     })
   }
-
-}
+})
 
 </script>
 

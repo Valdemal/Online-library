@@ -19,7 +19,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import HeaderWidget from '@/components/TheHeader.vue'
 </script>
 

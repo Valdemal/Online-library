@@ -16,9 +16,11 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   data () {
     return {
       errors: [
@@ -27,6 +29,6 @@ export default {
       ]
     }
   }
-}
+})
 
 </script>

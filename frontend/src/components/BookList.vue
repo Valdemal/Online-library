@@ -7,11 +7,12 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 import BookListItem from '@/components/BookListItem.vue'
 import { Book } from '@/api/schemas'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: { BookListItem },
   props: {
     author_slug: {
@@ -59,5 +60,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

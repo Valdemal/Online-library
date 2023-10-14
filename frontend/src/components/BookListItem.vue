@@ -13,10 +13,11 @@
   </router-link>
 </template>
 
-<script>
+<script lang="ts">
 import { Book } from '@/api/schemas'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: { },
   props: {
     book: {
@@ -24,7 +25,7 @@ export default {
       required: true
     }
   }
-}
+})
 </script>
 
 <style scoped>

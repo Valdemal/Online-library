@@ -10,7 +10,7 @@
   </router-link>
 </template>
 
-<script>
+<script lang="ts">
 import ContentItem from '@/components/ContentGridWidgetItem.vue'
 import { Author } from '@/api/schemas'
 

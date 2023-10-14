@@ -9,14 +9,15 @@
   </ContentGridWidget>
 </template>
 
-<script>
+<script lang="ts">
 
 import ContentGridWidget from '@/components/ContentGridWidget.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import AuthorListViewItem from '@/components/AuthorListViewItem.vue'
 import { Author } from '@/api/schemas'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: { AuthorListViewItem, TheHeader, ContentGridWidget },
   data () {
     return {
@@ -44,5 +45,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

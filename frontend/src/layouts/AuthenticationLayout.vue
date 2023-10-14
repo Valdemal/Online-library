@@ -10,7 +10,7 @@
   <footer-widget class="authorization-footer"/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import FooterWidget from '@/components/TheFooter.vue'
 </script>
 

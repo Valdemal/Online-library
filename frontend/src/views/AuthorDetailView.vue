@@ -23,21 +23,24 @@
   </ContentDetailWidget>
 </template>
 
-<script>
+<script lang="ts">
 
 import ContentDetailWidget from '@/components/ContentDetailWidget.vue'
 import BookList from '@/components/BookList.vue'
 import EstimationWidget from '@/components/BaseEstimation.vue'
 import DescriptionWidget from '@/components/BaseDescription.vue'
+import { defineComponent } from 'vue'
 import { Author } from '@/api/schemas'
 
-export default {
+interface State {
+  author: Author | null
+}
+
+export default defineComponent({
   components: { DescriptionWidget, EstimationWidget, BookList, ContentDetailWidget },
-  data () {
+  data (): State {
     return {
-      author: {
-        type: Author
-      }
+      author: null
     }
   },
   created () {
@@ -55,5 +58,5 @@ export default {
     })
   }
 
-}
+})
 </script>
