@@ -1,4 +1,5 @@
 import { applyMixins, DescriptionMixin, NameMixin, PopularityMixin, ScoreMixin, SlugMixin } from './mixins'
+import { Slug, FileUrl, Score } from '@/api/schemas/types'
 
 class _Author {}
 
@@ -8,12 +9,12 @@ applyMixins(_Author, [ScoreMixin, SlugMixin, PopularityMixin, DescriptionMixin, 
 
 export class Author extends _Author {
   constructor (json: {
-    slug: string,
+    slug: Slug,
     name: string,
     surname: string,
-    score: number | null,
+    score: Score,
     popularity: number,
-    image: string,
+    image: FileUrl,
     description: string
   }) {
     super()
@@ -26,7 +27,7 @@ export class Author extends _Author {
     this.description = json.description
   }
 
-  protected _image: string;
+  protected _image: FileUrl;
   protected _surname: string;
   get image () { return this._image }
   get surname () { return this._surname }

@@ -1,22 +1,24 @@
 import { applyMixins, DescriptionMixin, PopularityMixin, ScoreMixin, SlugMixin } from './mixins'
+import { Slug, FileUrl, Score } from '@/api/schemas/types'
 
 class _Book {}
 
 interface _Book extends ScoreMixin, SlugMixin, PopularityMixin, DescriptionMixin {}
 
 applyMixins(_Book, [ScoreMixin, SlugMixin, PopularityMixin, DescriptionMixin])
+
 export class Book extends _Book {
   constructor (json: {
-    slug:string,
-    author: string,
-    genres: string[],
+    slug:Slug,
+    author: Slug,
+    genres: Slug[],
     title: string,
     description: string,
-    file: string,
+    file: FileUrl,
     // eslint-disable-next-line camelcase
     year_of_writing: number,
-    cover: string,
-    score: number | null,
+    cover: FileUrl,
+    score: Score,
     popularity: number,
   }) {
     super()
@@ -34,12 +36,12 @@ export class Book extends _Book {
   }
 
   protected _author: string;
-  protected _genres: string[];
+  protected _genres: Slug[];
   protected _title: string;
-  protected _file: string;
+  protected _file: FileUrl;
   protected _yearOfWriting: number;
 
-  protected _cover: string;
+  protected _cover: FileUrl;
   get author () { return this._author }
   get genres () { return this._genres }
   get title () { return this._title }

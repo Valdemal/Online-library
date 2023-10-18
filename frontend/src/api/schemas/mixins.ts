@@ -1,3 +1,5 @@
+import { Score, Slug } from '@/api/schemas/types'
+
 export function applyMixins (derivedCtor: any, constructors: any[]) {
   constructors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
@@ -12,13 +14,13 @@ export function applyMixins (derivedCtor: any, constructors: any[]) {
 }
 
 export class ScoreMixin {
-  protected _score: number | null = 0;
+  protected _score: Score = 0;
 
-  get score (): number | null {
+  get score (): Score {
     return this._score
   }
 
-  set score (value: number | null) {
+  set score (value: Score) {
     this._score = value
   }
 
@@ -32,7 +34,7 @@ export class ScoreMixin {
 }
 
 export class SlugMixin {
-  protected _slug: string = '';
+  protected _slug: Slug = '';
 
   get slug (): string {
     return this._slug

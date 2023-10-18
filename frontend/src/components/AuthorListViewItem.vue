@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import ContentItem from '@/components/ContentGridWidgetItem.vue'
+import ContentItem from '@/widgets/ContentGridWidgetItem.vue'
 import { Author } from '@/api/schemas'
 
 export default {

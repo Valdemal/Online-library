@@ -1,4 +1,5 @@
 import { applyMixins, IdMixin, ScoreMixin } from './mixins'
+import { Score, Slug, Username } from '@/api/schemas/types'
 
 class _Comment {}
 
@@ -9,9 +10,9 @@ applyMixins(_Comment, [ScoreMixin, IdMixin])
 export class Comment extends _Comment {
   constructor (json: {
     id: number,
-    book: string,
-    user: string,
-    score: number,
+    book: Slug,
+    user: Username,
+    score: Score,
     text: string,
     // eslint-disable-next-line camelcase
     creation_time: string
@@ -27,8 +28,8 @@ export class Comment extends _Comment {
     this.id = json.id
   }
 
-  protected _book: string;
-  protected _user: string;
+  protected _book: Slug;
+  protected _user: Username;
   protected _text: string;
   protected _creationTime: string;
   get book () { return this._book }

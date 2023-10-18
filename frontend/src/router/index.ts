@@ -1,55 +1,26 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import AuthenticationLayout from '@/layouts/AuthenticationLayout.vue'
-import LoginView from '@/views/LoginView.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import ContentLayout from '@/layouts/ContentLayout.vue'
-import AuthorsList from '@/views/AuthorListView.vue'
-import RegistrationView from '@/views/RegistrationView.vue'
-import BooksList from '@/views/BookListView.vue'
-import AuthorDetail from '@/views/AuthorDetailView.vue'
-import BookDetail from '@/views/BookDetailView.vue'
+import AuthenticationLayout from '@/layouts/AuthenticationLayout.vue'
 
-const routes = [
+import content from '@/router/content'
+import authentication from '@/router/authentication'
+import NotFound from '@/views/NotFoundView.vue'
+
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
     component: ContentLayout,
-    children: [
-      {
-        path: '',
-        redirect: { name: 'books' }
-      }, {
-        path: '/authors',
-        name: 'authors',
-        component: AuthorsList
-      }, {
-        path: '/authors/:slug',
-        name: 'author-detail',
-        component: AuthorDetail
-      }, {
-        path: '/books',
-        name: 'books',
-        component: BooksList
-      }, {
-        path: '/books/:slug',
-        name: 'book-detail',
-        component: BookDetail
-      }
-    ]
+    children: content
   }, {
     path: '/auth',
     name: 'authentication',
     component: AuthenticationLayout,
-    children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: LoginView
-      }, {
-        path: '/registration',
-        name: 'registration',
-        component: RegistrationView
-      }
-    ]
+    children: authentication
+  }, {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound
   }
 ]
 

@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import Search from '@/components/SearchWidget.vue'
+import Search from '@/components/TheSearch.vue'
 </script>
 
 <style scoped>

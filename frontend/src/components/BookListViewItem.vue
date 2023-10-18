@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import ContentItem from '@/components/ContentGridWidgetItem.vue'
+import ContentItem from '@/widgets/ContentGridWidgetItem.vue'
 import { Book } from '@/api/schemas'
 import { defineComponent } from 'vue'
 export default defineComponent({

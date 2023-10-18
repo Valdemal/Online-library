@@ -1,7 +1,9 @@
+import { Email, FileUrl, Username } from '@/api/schemas/types'
+
 export class User {
-  protected _username: string;
-  protected _email: string;
-  protected _photo: string;
+  protected _username: Username;
+  protected _email: Email;
+  protected _photo: FileUrl;
   protected _isStaff: boolean;
 
   get username () {
@@ -22,7 +24,7 @@ export class User {
 
   constructor (json: {
     // eslint-disable-next-line camelcase
-    email: string, username: string, photo: string, is_staff: boolean
+    email: Email, username: Username, photo: FileUrl, is_staff: boolean
   }) {
     this._email = json.email
     this._username = json.username

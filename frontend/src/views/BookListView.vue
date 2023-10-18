@@ -10,7 +10,7 @@
 
 <script lang="ts">
 
-import ContentGridWidget from '@/components/ContentGridWidget.vue'
+import ContentGridWidget from '@/widgets/ContentGridWidget.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import BookListViewItem from '@/components/BookListViewItem.vue'
 import { Book } from '@/api/schemas'

@@ -11,7 +11,7 @@
 
 <script lang="ts">
 
-import ContentGridWidget from '@/components/ContentGridWidget.vue'
+import ContentGridWidget from '@/widgets/ContentGridWidget.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import AuthorListViewItem from '@/components/AuthorListViewItem.vue'
 import { Author } from '@/api/schemas'
