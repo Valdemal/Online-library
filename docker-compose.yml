@@ -32,6 +32,7 @@ services:
     build: ./frontend
     volumes:
       - frontend:/usr/src/frontend
+    env_file: .env
     depends_on:
       - django
 
