@@ -4,6 +4,6 @@ WORKDIR /usr/src/frontend
 
 COPY . .
 
-RUN npm install
+RUN npm install --force
 
 CMD npm run build
