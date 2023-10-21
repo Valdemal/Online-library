@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <div class="photo">
-      <img :src="user.photo" :alt="user.username">
+<!--      <img :src="user.photo" :alt="user.username"> todo: пока нет возможности получить-->
       <EstimationWidget>
         <div>🌟{{ comment.roundedScore() }}</div>
       </EstimationWidget>
@@ -31,15 +31,6 @@ export default defineComponent({
     return {
       user: null
     }
-  },
-  created () {
-    // Получение данных пользователя по полю comment.user
-    this.user = new User({
-      username: 'vovan',
-      email: 'vovanex12@gmail.com',
-      photo: 'http://127.0.0.1/media/users/photos/%D0%9D%D0%B0_%D0%BF%D0%B0%D1%81%D0%BF%D0%BE%D1%80%D1%82.jpg',
-      is_staff: true
-    })
   }
 })
 

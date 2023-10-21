@@ -9,8 +9,8 @@
         <div class="photo">
           <img :src="author.image" :alt="author.fullName">
           <EstimationWidget>
-            <div>🌟{{ author.roundedScore() }}</div>
-            <div>📚{{ author.popularity }}</div>
+            <div v-if="author.roundedScore()">🌟{{ author.roundedScore() }}</div>
+            <div v-if="author.popularity">📚{{ author.popularity }}</div>
           </EstimationWidget>
         </div>
         <div class="text">{{ author.description }}</div>

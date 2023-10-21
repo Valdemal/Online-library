@@ -1,5 +1,5 @@
 <template>
-  <div class="comments-layout">
+  <div class="comments-layout" v-if="comments.length !== 0">
     <div class="comments-label flex-center">Комментарии</div>
     <CommentListItem
       v-for="comment in comments"
@@ -13,6 +13,12 @@
 import CommentListItem from '@/components/CommentListItem.vue'
 import { Comment } from '@/api/schemas'
 import { defineComponent } from 'vue'
+import { CommentsService } from '@/api/services'
+
+interface State {
+  comments: Comment[]
+}
+
 export default defineComponent({
   components: { CommentListItem },
   props: {
@@ -25,31 +31,20 @@ export default defineComponent({
       required: false
     }
   },
-  data () {
+  data (): State {
     return {
-      comments: [
-        {
-          id: 9,
-          book: 'generation-p-viktor-pelevin',
-          user: 'staff_user',
-          score: 3,
-          text: 'Бредово, но пойдет',
-          creation_time: '2022-12-18T04:18:55.497852+03:00'
-        },
-        {
-          id: 8,
-          book: 'marsianskie-khroniki-rej-bredberi',
-          user: 'staff_user',
-          score: 5,
-          text: 'Здорово!!!',
-          creation_time: '2022-12-18T04:18:33.102122+03:00'
-        }
-      ].map((json) => {
+      comments: []
+    }
+  },
+  created () {
+    CommentsService.list({ book: this.book_slug, user: this.username }).then((response) => {
+      this.comments = response.data.results.map((json: any) => {
         return new Comment(json)
       })
-    }
+    })
   }
 })
+
 </script>
 
 <style scoped>
