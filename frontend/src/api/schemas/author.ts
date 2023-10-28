@@ -1,7 +1,7 @@
 import { applyMixins, DescriptionMixin, NameMixin, PopularityMixin, ScoreMixin, SlugMixin } from './mixins'
-import { Slug, FileUrl, Score } from '@/api/schemas/types'
+import { Slug, FileUrl, Score, Schema } from '@/api/schemas/types'
 
-class _Author {}
+class _Author implements Schema {}
 
 interface _Author extends ScoreMixin, SlugMixin, PopularityMixin, DescriptionMixin, NameMixin {}
 

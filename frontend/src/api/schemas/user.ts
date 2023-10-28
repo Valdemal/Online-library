@@ -1,6 +1,6 @@
-import { Email, FileUrl, Username } from '@/api/schemas/types'
+import { Email, FileUrl, Schema, Username } from '@/api/schemas/types'
 
-export class User {
+export class User implements Schema {
   protected _username: Username;
   protected _email: Email;
   protected _photo: FileUrl;

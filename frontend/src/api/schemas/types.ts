@@ -1,3 +1,5 @@
+export interface Schema {}
+
 export type Slug = string;
 
 export type FileUrl = string;

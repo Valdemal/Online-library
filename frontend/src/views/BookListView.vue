@@ -28,14 +28,12 @@ export default defineComponent({
       books: []
     }
   },
-  created () {
-    BooksService.list().then((response) => {
-      this.books = response.data.results.map((json: any) => {
-        return new Book(json)
-      })
-    }).catch((error) => {
+  async created () {
+    try {
+      this.books = await new BooksService().list()
+    } catch (error) {
       console.log(error)
-    })
+    }
   }
 })
 </script>

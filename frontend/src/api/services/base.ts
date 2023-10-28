@@ -1,17 +1,36 @@
 import { API_URL } from '@/api/config'
-import { Slug } from '@/api/schemas/types'
+import { Schema, Slug } from '@/api/schemas/types'
 import axios from 'axios'
+import { applyMixins } from '@/api/schemas/mixins'
 
-export class Service {
-  protected static BASE_URL = API_URL;
+abstract class Service {
+  protected abstract baseUrl: string;
+  // @ts-ignore
+  protected abstract SchemaClass: Constructor;
+}
 
-  public static list (params: Object = {}) {
-    return axios.get(this.BASE_URL, {
+export abstract class ListServiceMixin extends Service {
+  public async list (params: Object = {}) {
+    const response = await axios.get(this.baseUrl, {
       params: params
     })
-  }
 
-  public static detail (slug: Slug) {
-    return axios.get(`${this.BASE_URL}${slug}/`)
+    return response.data.results.map((json: any) => {
+      return new this.SchemaClass(json)
+    })
   }
 }
+
+export abstract class DetailServiceMixin extends Service {
+  public async detail (slug: Slug) {
+    const response = await axios.get(`${this.baseUrl}${slug}/`)
+    return new this.SchemaClass(response.data)
+  }
+}
+
+abstract class _FullService {}
+interface _FullService extends Service, ListServiceMixin, DetailServiceMixin {}
+
+applyMixins(_FullService, [Service, ListServiceMixin, DetailServiceMixin])
+
+export abstract class FullService extends _FullService {}

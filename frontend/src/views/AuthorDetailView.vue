@@ -21,14 +21,14 @@ export default defineComponent({
       author: null
     }
   },
-  created () {
+  async created () {
     const slug = this.$route.params.slug.toString()
 
-    AuthorsService.detail(slug).then((response) => {
-      this.author = new Author(response.data)
-    }).catch(() => {
-      router.push({ name: 'not-found' })
-    })
+    try {
+      this.author = await new AuthorsService().detail(slug)
+    } catch {
+      await router.push({ name: 'not-found' })
+    }
   }
 
 })

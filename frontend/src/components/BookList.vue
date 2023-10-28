@@ -30,12 +30,12 @@ export default defineComponent({
       books: []
     }
   },
-  created () {
-    BooksService.list({ author: this.author_slug }).then((response) => {
-      this.books = response.data.results.map((json: any) => {
-        return new Book(json)
-      })
-    })
+  async created () {
+    try {
+      this.books = await new BooksService().list({ author: this.author_slug })
+    } catch (error) {
+      console.log(error)
+    }
   }
 })
 </script>

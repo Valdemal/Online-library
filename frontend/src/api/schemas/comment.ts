@@ -1,7 +1,7 @@
 import { applyMixins, IdMixin, ScoreMixin } from './mixins'
-import { Score, Slug, Username } from '@/api/schemas/types'
+import { Score, Schema, Slug, Username } from '@/api/schemas/types'
 
-class _Comment {}
+class _Comment implements Schema {}
 
 interface _Comment extends ScoreMixin, IdMixin {}
 
