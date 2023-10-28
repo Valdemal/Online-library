@@ -1,7 +1,9 @@
 <template>
   <header class="flex-center">
     <div class="logo flex-center">
-      <img src="../assets/logo.jpg" alt="logo">
+      <router-link :to="{name: 'index'}">
+        <img src="../assets/logo.jpg" alt="logo">
+      </router-link>
     </div>
   </header>
   <main class="flex-center">

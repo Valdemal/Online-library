@@ -7,6 +7,7 @@ import NotFound from '@/views/NotFoundView.vue'
 export default [
   {
     path: '',
+    name: 'index',
     redirect: { name: 'books' }
   }, {
     path: '/authors',

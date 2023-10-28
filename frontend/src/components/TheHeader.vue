@@ -1,16 +1,18 @@
 <template>
   <header>
     <div class="logo flex-center">
-      <img src="../assets/logo.jpg" alt="logo">
+      <router-link :to="{name: 'index'}">
+        <img src="../assets/logo.jpg" alt="logo">
+      </router-link>
     </div>
     <div class="header-container">
       <nav class="flex-right">
-        <router-link class="nav-link" to="/books">Книги</router-link>
-        <router-link class="nav-link" to="/authors">Авторы</router-link>
+        <router-link class="nav-link" :to="{name:'books'}">Книги</router-link>
+        <router-link class="nav-link" :to="{name:'authors'}">Авторы</router-link>
         <div class="nav-side">
-          <router-link to="/login">Войти</router-link>
+          <router-link :to="{name:'login'}">Войти</router-link>
           |
-          <router-link to="/registration">Зарегистрироваться</router-link>
+          <router-link :to="{name:'registration'}">Зарегистрироваться</router-link>
         </div>
       </nav>
       <slot><Search/></slot>
