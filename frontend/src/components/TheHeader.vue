@@ -1,25 +1,57 @@
 <template>
   <header>
     <div class="logo flex-center">
-      <img src="../assets/logo.jpg" alt="logo">
+      <router-link :to="{name: 'index'}">
+        <img src="../assets/logo.jpg" alt="logo">
+      </router-link>
     </div>
     <div class="header-container">
       <nav class="flex-right">
-        <router-link class="nav-link" to="/books">Книги</router-link>
-        <router-link class="nav-link" to="/authors">Авторы</router-link>
-        <div class="nav-side">
-          <router-link to="/login">Войти</router-link>
+        <router-link class="nav-link" :to="{name:'books'}">Книги</router-link>
+        <router-link class="nav-link" :to="{name:'authors'}">Авторы</router-link>
+        <a v-if="me" class="nav-link">Полка</a>
+        <user-nav v-if="me" :user="me" class="nav-side flex-center"/>
+        <div v-else class="nav-side">
+          <router-link :to="{name:'login'}">Войти</router-link>
           |
-          <router-link to="/registration">Зарегистрироваться</router-link>
+          <router-link :to="{name:'registration'}">Зарегистрироваться</router-link>
         </div>
       </nav>
-      <slot><Search/></slot>
+      <slot><TheSearch/></slot>
     </div>
   </header>
 </template>
 
-<script setup>
-import Search from '@/components/TheSearch.vue'
+<script lang="ts">
+import TheSearch from '@/components/TheSearch.vue'
+import { defineComponent } from 'vue'
+import { MeService } from '@/api/services'
+import { User } from '@/api/schemas'
+import UserNav from '@/components/UserNav.vue'
+
+interface State {
+  me: User|null
+}
+
+export default defineComponent({
+  components: { UserNav, TheSearch },
+  data (): State {
+    return {
+      me: null
+    }
+  },
+  async created () {
+    const service = new MeService()
+
+    if (service.isAuthenticated()) {
+      try {
+        this.me = await service.get()
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -66,17 +98,4 @@ header nav {
   height: 100%;
 }
 
-/deep/ .subheader {
-  height: 42px;
-  padding: 0 20px 0 20px;
-  background-color: #D9D9D9;
-  color: #464646;
-  margin-right: 310px;
-}
-
-/deep/ .user-image {
-  height: 70px;
-  border: 5px solid #3F9FF8;
-  margin-left: 10px;
-}
 </style>

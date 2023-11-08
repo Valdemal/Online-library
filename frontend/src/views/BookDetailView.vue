@@ -20,18 +20,16 @@ export default defineComponent({
   data (): State {
     return { book: null, author: null }
   },
-  created () {
+  async created () {
     const slug = this.$route.params.slug.toString()
 
-    BooksService.detail(slug).then((response) => {
-      this.book = new Book(response.data)
+    try {
+      this.book = await new BooksService().detail(slug)
 
-      AuthorsService.detail(this.book.author).then((response) => {
-        this.author = new Author(response.data)
-      })
-    }).catch(() => {
-      router.push({ name: 'not-found' })
-    })
+      if (this.book) { this.author = await new AuthorsService().detail(this.book.author) }
+    } catch {
+      await router.push({ name: 'not-found' })
+    }
   }
 })
 

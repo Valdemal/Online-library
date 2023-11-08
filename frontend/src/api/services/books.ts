@@ -1,6 +1,8 @@
 import { API_URL } from '@/api/config'
-import { Service } from '@/api/services/base'
+import { FullService } from '@/api/services/base'
+import { Book } from '@/api/schemas'
 
-export default class BooksService extends Service {
-  protected static BASE_URL = API_URL + 'books/';
+export default class BooksService extends FullService {
+  protected SchemaClass = Book;
+  protected baseUrl: string = API_URL + 'books/';
 }

@@ -36,12 +36,12 @@ export default defineComponent({
       comments: []
     }
   },
-  created () {
-    CommentsService.list({ book: this.book_slug, user: this.username }).then((response) => {
-      this.comments = response.data.results.map((json: any) => {
-        return new Comment(json)
-      })
-    })
+  async created () {
+    try {
+      this.comments = await new CommentsService().list({ book: this.book_slug, user: this.username })
+    } catch (error) {
+      console.log(error)
+    }
   }
 })
 

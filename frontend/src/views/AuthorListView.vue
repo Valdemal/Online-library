@@ -29,14 +29,12 @@ export default defineComponent({
       authors: []
     }
   },
-  created () {
-    AuthorsService.list().then((response) => {
-      this.authors = response.data.results.map((json: any) => {
-        return new Author(json)
-      })
-    }).catch(() => {
+  async created () {
+    try {
+      this.authors = await new AuthorsService().list()
+    } catch {
       console.error('Авторы не получены!')
-    })
+    }
   }
 })
 </script>
