@@ -2,7 +2,6 @@ import AuthorsList from '@/views/AuthorListView.vue'
 import AuthorDetail from '@/views/AuthorDetailView.vue'
 import BooksList from '@/views/BookListView.vue'
 import BookDetail from '@/views/BookDetailView.vue'
-import NotFound from '@/views/NotFoundView.vue'
 
 export default [
   {
