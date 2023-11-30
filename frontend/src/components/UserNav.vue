@@ -1,31 +1,32 @@
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { User } from '@/api/schemas'
-
-const USER_PHOTO_PLACEHOLDER_SRC = new URL('@/assets/user_photo_placeholder.png', import.meta.url).href
+import { defineComponent } from 'vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'UserNav',
-  props: {
-    user: {
-      type: Object as PropType<User>,
-      required: true
-    }
-  },
-  computed: {
-    userPhoto () {
-      return this.user.photo ? this.user.photo : USER_PHOTO_PLACEHOLDER_SRC
+  computed: mapGetters(['currentUser']),
+  methods: mapActions(['fetchCurrentUser']),
+  async created () {
+    try {
+      await this.fetchCurrentUser()
+    } catch (e) {
+      console.log(e)
     }
   }
 })
 </script>
 
 <template>
-  <div>
-    <a href="#">{{ user.username }}</a>
+  <div v-if="this.currentUser">
+    <a href="#">{{ this.currentUser.username }}</a>
     |
     <router-link :to="{name: 'logout'}">выйти</router-link>
-    <img class="user-image" :src="userPhoto" alt="Фото профиля">
+    <img class="user-image" :src="this.currentUser.photo" alt="Фото профиля">
+  </div>
+  <div v-else>
+    <router-link :to="{name:'login'}">Войти</router-link>
+    |
+    <router-link :to="{name:'registration'}">Зарегистрироваться</router-link>
   </div>
 </template>
 

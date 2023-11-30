@@ -12,6 +12,6 @@ export default class MeService extends SchemaService {
   }
 
   public isAuthenticated (): boolean {
-    return Boolean(localStorage.authToken)
+    return localStorage.authToken
   }
 }

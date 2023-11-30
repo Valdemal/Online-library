@@ -9,13 +9,8 @@
       <nav class="flex-right">
         <router-link class="nav-link" :to="{name:'books'}">Книги</router-link>
         <router-link class="nav-link" :to="{name:'authors'}">Авторы</router-link>
-        <a v-if="me" class="nav-link">Полка</a>
-        <user-nav v-if="me" :user="me" class="nav-side flex-center"/>
-        <div v-else class="nav-side">
-          <router-link :to="{name:'login'}">Войти</router-link>
-          |
-          <router-link :to="{name:'registration'}">Зарегистрироваться</router-link>
-        </div>
+        <a v-if="currentUser" class="nav-link">Полка</a>
+        <user-nav class="nav-side flex-center"/>
       </nav>
       <slot><TheSearch/></slot>
     </div>
@@ -25,32 +20,12 @@
 <script lang="ts">
 import TheSearch from '@/components/TheSearch.vue'
 import { defineComponent } from 'vue'
-import { MeService } from '@/api/services'
-import { User } from '@/api/schemas'
 import UserNav from '@/components/UserNav.vue'
-
-interface State {
-  me: User|null
-}
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
   components: { UserNav, TheSearch },
-  data (): State {
-    return {
-      me: null
-    }
-  },
-  async created () {
-    const service = new MeService()
-
-    if (service.isAuthenticated()) {
-      try {
-        this.me = await service.get()
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  }
+  computed: mapGetters(['currentUser'])
 })
 </script>
 

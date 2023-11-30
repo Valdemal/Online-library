@@ -11,3 +11,5 @@ export type Email = string;
 export type Username = string;
 
 export type AuthToken = string;
+
+export type LoginCredentials = {username: string, password: string};

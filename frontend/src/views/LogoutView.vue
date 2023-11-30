@@ -1,18 +1,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { AuthService } from '@/api/services'
 import router from '@/router'
+import { mapActions } from 'vuex'
 
 export default defineComponent({
   name: 'LogoutView',
   async created () {
     try {
-      const authService = new AuthService()
-      await authService.logout()
-      localStorage.removeItem('authToken')
+      await this.logout()
     } finally {
       await router.push({ name: 'index' })
     }
-  }
+  },
+  methods: mapActions(['logout'])
 })
 </script>

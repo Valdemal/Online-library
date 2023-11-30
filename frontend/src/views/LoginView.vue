@@ -3,7 +3,7 @@
   <form action="#">
     <div class="title flex-center">Вход</div>
     <div class="content">
-      <label><input v-model="login" type="text" placeholder="Имя пользователя"></label>
+      <label><input v-model="username" type="text" placeholder="Имя пользователя"></label>
       <label><input v-model="password" type="password" placeholder="Пароль"></label>
       <ul class="errors">
         <li v-for="error in errors" :key="error">{{ error }}</li>
@@ -19,11 +19,11 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { AuthService } from '@/api/services'
 import router from '@/router'
+import { mapActions } from 'vuex'
 
 interface State {
-  login: string
+  username: string
   password: string
   errors: string[]
 }
@@ -31,19 +31,16 @@ interface State {
 export default defineComponent({
   data (): State {
     return {
-      login: '',
+      username: '',
       password: '',
       errors: []
     }
   },
   methods: {
+    ...mapActions(['login']),
     async onLogin () {
       try {
-        const token = await new AuthService().login({
-          username: this.login,
-          password: this.password
-        })
-        localStorage.authToken = token
+        await this.login({ username: this.username, password: this.password })
         await router.push({ name: 'index' })
       } catch (error: any) {
         console.log(error)

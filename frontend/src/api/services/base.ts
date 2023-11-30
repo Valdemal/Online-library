@@ -19,7 +19,6 @@ function putAuthTokenIntoHeaders (config: any) {
 
 function putCSRFTokenIntoHeaders (config: any) {
   const csrfToken = getCookie('csrftoken')
-  console.log(csrfToken)
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken
   }
