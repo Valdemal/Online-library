@@ -1,12 +1,27 @@
-import { Schema, Slug } from '@/api/schemas/types'
+import { Slug } from '@/api/schemas/types'
 import axios from 'axios'
 import { applyMixins } from '@/api/schemas/mixins'
 
+function getCookie (name: string) {
+  const matches = document.cookie.match(new RegExp(
+    '(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'
+  ))
+  return matches ? decodeURIComponent(matches[1]) : undefined
+}
+
 function putAuthTokenIntoHeaders (config: any) {
   if (localStorage.authToken) {
-    config.headers = {
-      Authorization: `Token ${localStorage.authToken}`
-    }
+    config.headers.Authorization = `Token ${localStorage.authToken}`
+  }
+
+  return config
+}
+
+function putCSRFTokenIntoHeaders (config: any) {
+  const csrfToken = getCookie('csrftoken')
+  console.log(csrfToken)
+  if (csrfToken) {
+    config.headers['X-CSRFToken'] = csrfToken
   }
 
   return config
@@ -19,7 +34,9 @@ export abstract class Service {
     const instance = axios.create()
 
     instance.interceptors.request.use(putAuthTokenIntoHeaders)
+    instance.interceptors.request.use(putCSRFTokenIntoHeaders)
     instance.interceptors.response.use(putAuthTokenIntoHeaders)
+    instance.interceptors.response.use(putCSRFTokenIntoHeaders)
 
     return instance
   })()
