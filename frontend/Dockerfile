@@ -1,4 +1,4 @@
-FROM node:latest AS build
+FROM node:18-alpine AS build
 
 WORKDIR /usr/src/frontend
 
